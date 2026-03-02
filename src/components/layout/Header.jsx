@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-background-light">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="text-4xl font-normal !text-text hover:!text-text-muted transition-colors">
+        <Link to="/" className="text-5xl font-bold !text-text hover:!text-text-muted transition-colors">
           zynx
         </Link>
 

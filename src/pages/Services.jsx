@@ -89,9 +89,6 @@ export default function Services() {
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-sm font-normal text-text-muted mb-4">
-                      Things like
-                    </h3>
                     <ul className="space-y-3">
                       {service.features.map((feature, fIndex) => (
                         <li key={fIndex} className="flex items-start gap-3 text-text-muted">

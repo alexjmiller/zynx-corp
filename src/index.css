@@ -2,8 +2,8 @@
 
 @theme {
   /* Custom colors matching design system */
-  --color-background: #2f2f2f;
-  --color-background-light: #3a3a3a;
+  --color-background: #282828;
+  --color-background-light: #333333;
   --color-text: #d5d5d5;
   --color-text-muted: #838383;
   --color-accent: #6417a3;
