@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import Container from '../components/ui/Container'
 import Card from '../components/ui/Card'
 import CalendlyEmbed from '../components/sections/CalendlyEmbed'
@@ -5,6 +6,15 @@ import CalendlyEmbed from '../components/sections/CalendlyEmbed'
 export default function Contact() {
   return (
     <>
+      <Helmet>
+        <title>Contact Us - Book a Free Consultation | Zynx</title>
+        <meta name="description" content="Book a free 30-minute consultation to discuss your software needs. Email us at hello@zynx.co or schedule a call online." />
+        <meta property="og:title" content="Contact Us - Book a Free Consultation | Zynx" />
+        <meta property="og:description" content="Book a free consultation to discuss your custom software needs." />
+        <meta property="og:url" content="https://zynx.co/contact" />
+        <meta name="twitter:title" content="Contact Us - Book a Free Consultation | Zynx" />
+        <meta name="twitter:description" content="Book a free consultation to discuss your custom software needs." />
+      </Helmet>
       {/* Hero */}
       <section className="py-24">
         <Container>

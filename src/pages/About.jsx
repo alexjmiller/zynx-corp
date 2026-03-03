@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import Container from '../components/ui/Container'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
@@ -20,6 +21,15 @@ const values = [
 export default function About() {
   return (
     <>
+      <Helmet>
+        <title>About Zynx - Custom Software for Small & Medium Businesses</title>
+        <meta name="description" content="Learn about Zynx and our mission to provide affordable, high-quality custom software solutions for small and medium businesses." />
+        <meta property="og:title" content="About Zynx - Custom Software for Small & Medium Businesses" />
+        <meta property="og:description" content="Affordable, high-quality custom software solutions for small and medium businesses." />
+        <meta property="og:url" content="https://zynx.co/about" />
+        <meta name="twitter:title" content="About Zynx - Custom Software for Small & Medium Businesses" />
+        <meta name="twitter:description" content="Affordable, high-quality custom software solutions for small and medium businesses." />
+      </Helmet>
       {/* Hero */}
       <section className="py-24">
         <Container>

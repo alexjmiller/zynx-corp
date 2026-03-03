@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import Hero from '../components/sections/Hero'
 import ServiceCards from '../components/sections/ServiceCards'
 import Container from '../components/ui/Container'
@@ -6,6 +7,15 @@ import Button from '../components/ui/Button'
 export default function Home() {
   return (
     <>
+      <Helmet>
+        <title>Zynx - Modern Software Solutions for Growing Businesses</title>
+        <meta name="description" content="Zynx builds custom software, automates workflows, and designs intuitive UX for small and medium businesses. Book a free consultation." />
+        <meta property="og:title" content="Zynx - Modern Software Solutions for Growing Businesses" />
+        <meta property="og:description" content="Custom software, workflow automation, and UX design for small and medium businesses." />
+        <meta property="og:url" content="https://zynx.co/" />
+        <meta name="twitter:title" content="Zynx - Modern Software Solutions for Growing Businesses" />
+        <meta name="twitter:description" content="Custom software, workflow automation, and UX design for small and medium businesses." />
+      </Helmet>
       <Hero />
       <ServiceCards />
 

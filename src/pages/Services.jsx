@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async'
 import Container from '../components/ui/Container'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
@@ -56,6 +57,15 @@ const services = [
 export default function Services() {
   return (
     <>
+      <Helmet>
+        <title>Our Services - UX Design, Custom Development & Automation | Zynx</title>
+        <meta name="description" content="UX design, custom software development, process automation, and systems integration tailored for small and medium businesses." />
+        <meta property="og:title" content="Our Services - UX Design, Custom Development & Automation | Zynx" />
+        <meta property="og:description" content="UX design, custom software development, process automation, and systems integration tailored for SMBs." />
+        <meta property="og:url" content="https://zynx.co/services" />
+        <meta name="twitter:title" content="Our Services - UX Design, Custom Development & Automation | Zynx" />
+        <meta name="twitter:description" content="UX design, custom software development, process automation, and systems integration tailored for SMBs." />
+      </Helmet>
       {/* Hero */}
       <section className="py-24">
         <Container>

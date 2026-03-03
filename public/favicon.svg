@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Purple circle background -->
+  <circle cx="32" cy="32" r="32" fill="#6417a3"/>
+  <!-- 3D octahedron – front/top face (brightest) -->
+  <polygon points="32,0 59.6,47.9 4.4,47.9" fill="#ffffff"/>
+  <!-- Right face -->
+  <polygon points="32,0 59.6,16.1 59.6,47.9" fill="#d8d8d8"/>
+  <!-- Left face -->
+  <polygon points="32,0 4.4,47.9 4.4,16.1" fill="#e4e4e4"/>
+  <!-- Bottom face -->
+  <polygon points="32,64 4.4,47.9 59.6,47.9" fill="#c0c0c0"/>
+  <!-- Subtle edge lines between faces -->
+  <line x1="32" y1="0" x2="59.6" y2="47.9" stroke="#6417a3" stroke-width="0.7" opacity="0.2"/>
+  <line x1="32" y1="0" x2="4.4" y2="47.9" stroke="#6417a3" stroke-width="0.7" opacity="0.2"/>
+  <line x1="4.4" y1="47.9" x2="59.6" y2="47.9" stroke="#6417a3" stroke-width="0.7" opacity="0.2"/>
+</svg>
