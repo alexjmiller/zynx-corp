@@ -31,7 +31,10 @@ export default function BookingWidget({ slug }) {
       { headers }
     )
       .then((r) => r.json())
-      .then((data) => setAvailableDays(data.days || []))
+      .then((data) => {
+        const today = new Date().toISOString().split('T')[0]
+        setAvailableDays((data.days || []).filter((d) => d >= today))
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
   }, [slug, timezone])
@@ -101,6 +104,31 @@ export default function BookingWidget({ slug }) {
     })
   }
 
+  function buildCalendar() {
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = now.getMonth()
+    const firstDay = new Date(year, month, 1).getDay()
+    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    const availableSet = new Set(availableDays)
+    const today = now.getDate()
+
+    const cells = []
+    for (let i = 0; i < firstDay; i++) {
+      cells.push({ day: null })
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+      cells.push({
+        day: d,
+        dateStr,
+        available: availableSet.has(dateStr),
+        past: d < today,
+      })
+    }
+    return { cells, label: new Date(year, month).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) }
+  }
+
   if (step === 'confirmed' && booking) {
     return (
       <div className="p-8 text-center">
@@ -135,27 +163,51 @@ export default function BookingWidget({ slug }) {
         </div>
       )}
 
-      {step === 'date' && (
-        <div>
-          <h3 className="text-xl text-text mb-6">Select a Date</h3>
-          {loading && <p className="text-text-muted">Loading availability...</p>}
-          {!loading && availableDays.length === 0 && (
-            <p className="text-text-muted">No availability this month.</p>
-          )}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {availableDays.map((day) => (
-              <button
-                key={day}
-                onClick={() => setSelectedDate(day)}
-                className="px-4 py-3 rounded-lg border border-background text-text-muted
-                  hover:border-accent hover:text-text transition-colors text-sm text-left"
-              >
-                {formatDateLabel(day)}
-              </button>
-            ))}
+      {step === 'date' && (() => {
+        const { cells, label } = buildCalendar()
+        return (
+          <div>
+            <h3 className="text-xl text-text mb-1">Select a Date</h3>
+            <p className="text-sm text-text-muted mb-4">{label}</p>
+            {loading && <p className="text-text-muted">Loading availability...</p>}
+            {!loading && availableDays.length === 0 && (
+              <p className="text-text-muted">No availability this month.</p>
+            )}
+            {!loading && availableDays.length > 0 && (
+              <div>
+                <div className="grid grid-cols-7 gap-1 mb-1">
+                  {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+                    <div key={d} className="text-center text-xs text-text-muted py-1">{d}</div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-7 gap-1">
+                  {cells.map((cell, i) =>
+                    cell.day === null ? (
+                      <div key={`empty-${i}`} />
+                    ) : cell.available && !cell.past ? (
+                      <button
+                        key={cell.dateStr}
+                        onClick={() => setSelectedDate(cell.dateStr)}
+                        className="aspect-square flex items-center justify-center rounded-lg text-sm
+                          text-text hover:bg-accent hover:text-white transition-colors"
+                      >
+                        {cell.day}
+                      </button>
+                    ) : (
+                      <div
+                        key={cell.dateStr}
+                        className="aspect-square flex items-center justify-center rounded-lg text-sm text-text-muted/40"
+                      >
+                        {cell.day}
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
+        )
+      })()}
 
       {step === 'time' && (
         <div>
