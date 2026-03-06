@@ -36,7 +36,7 @@ export default function Contact() {
             {/* Booking Widget */}
             <div className="lg:col-span-2">
               <Card hover={false} className="p-0 overflow-hidden">
-                <BookingWidget slug="intro-call" />
+                <BookingWidget slug="consultation" />
               </Card>
             </div>
 
