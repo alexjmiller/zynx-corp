@@ -31,7 +31,7 @@ src/
 ├── components/
 │   ├── layout/      # Header, Footer, Layout wrapper
 │   ├── ui/          # Button, Card, Container
-│   └── sections/    # Hero, ServiceCards, CalendlyEmbed
+│   └── sections/    # Hero, ServiceCards, BookingWidget
 ├── pages/           # Home, Services, About, Contact
 ├── App.jsx          # Router setup
 ├── main.jsx         # Entry point

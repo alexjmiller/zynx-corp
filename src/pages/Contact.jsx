@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import Container from '../components/ui/Container'
 import Card from '../components/ui/Card'
-import CalendlyEmbed from '../components/sections/CalendlyEmbed'
+import BookingWidget from '../components/sections/BookingWidget'
 
 export default function Contact() {
   return (
@@ -33,10 +33,10 @@ export default function Contact() {
       <section className="py-12">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Calendly Embed */}
+            {/* Booking Widget */}
             <div className="lg:col-span-2">
               <Card hover={false} className="p-0 overflow-hidden">
-                <CalendlyEmbed url="https://calendly.com/alexander-miller" />
+                <BookingWidget slug="intro-call" />
               </Card>
             </div>
 
