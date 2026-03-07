@@ -16,7 +16,7 @@ export default function Contact() {
         <meta name="twitter:description" content="Book a free consultation to discuss your custom software needs." />
       </Helmet>
       {/* Hero */}
-      <section className="py-24">
+      <section className="pt-24 pb-10">
         <Container>
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-normal text-text leading-tight">
@@ -30,7 +30,7 @@ export default function Contact() {
       </section>
 
       {/* Contact Options */}
-      <section className="py-12">
+      <section className="py-6">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Booking Widget */}
