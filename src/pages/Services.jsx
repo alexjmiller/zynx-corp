@@ -67,7 +67,7 @@ export default function Services() {
         <meta name="twitter:description" content="UX design, custom software development, process automation, and systems integration tailored for SMBs." />
       </Helmet>
       {/* Hero */}
-      <section className="py-24">
+      <section className="pt-24 pb-10">
         <Container>
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-normal text-text leading-tight">
@@ -83,7 +83,7 @@ export default function Services() {
       </section>
 
       {/* Services Detail */}
-      <section className="py-12">
+      <section className="py-6">
         <Container>
           <div className="space-y-16">
             {services.map((service, index) => (

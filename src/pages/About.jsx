@@ -31,7 +31,7 @@ export default function About() {
         <meta name="twitter:description" content="Affordable, high-quality custom software solutions for small and medium businesses." />
       </Helmet>
       {/* Hero */}
-      <section className="py-24">
+      <section className="pt-24 pb-10">
         <Container>
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-normal text-text leading-tight">
@@ -46,7 +46,7 @@ export default function About() {
       </section>
 
       {/* Story */}
-      <section className="py-12">
+      <section className="py-6">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
             <div>
