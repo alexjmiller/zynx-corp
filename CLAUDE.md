@@ -4,9 +4,10 @@ Modern React website for Zynx targeting SMB clients.
 
 ## Tech Stack
 
-- **Framework**: Vite + React 18
+- **Framework**: Vite + React 19
 - **Styling**: Tailwind CSS v4
-- **Routing**: React Router v6
+- **Routing**: React Router v7
+- **Booking**: booq.now API (slug: `consultation`)
 - **Deployment**: Netlify
 
 ## Development Commands
