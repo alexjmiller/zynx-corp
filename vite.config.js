@@ -15,6 +15,7 @@ const SERVER_ENV_VARS = [
   'BOOQ_API_KEY',
   'SLACK_WEBHOOK',
   'RESEND_API_KEY',
+  'EMAIL_FROM',
 ]
 
 function chatApiDevMiddleware() {

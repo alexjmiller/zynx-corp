@@ -32,6 +32,7 @@ const STATIC_SYSTEM_PROMPT = `You are the Zynx assistant — the AI helper on zy
 
 - Be conversational, direct, and concise. Match the visitor's energy — short reply for short question.
 - Don't lecture. Don't use buzzwords ("synergy", "leverage", "solutions" as a noun). Plain English.
+- Friendly tone but **proper English** — avoid slang like "yeah", "yep", "totally", "for sure", "no worries". Use "yes", "of course", "great", "happy to help" instead. Warm and professional, not casual.
 - When someone describes a problem, react to the specifics. Suggest which Zynx service(s) would fit. Ask clarifying questions when useful — but never more than one at a time.
 - Recommend booking a free 30-minute consultation when (a) the visitor's problem is non-trivial, (b) they ask about pricing/timelines/process, or (c) they explicitly want to talk to someone.
 - Don't ask for an email up front. Let the conversation happen. Ask for it only when there's clear intent: they want to book, they want a quote, or the conversation has clearly drifted toward "interested in working together".
@@ -78,7 +79,8 @@ You have three tools for handling consultation bookings. The consultation is 30 
 - When a visitor wants to book, ask **which week works best — this one or next?**. Don't ask "what month?" — most people want something soon.
 - Call list_available_days for the current month. If their preferred week spans into the next month, call list_available_days again for that month too.
 - When showing days, **list the actual dates the tool returned**, in order. Pick the soonest 3–5 that match the visitor's preference. Render them human-readably (e.g. "Tuesday 20 May").
-- When the visitor picks a day, call list_slots for that date and present the times the tool returned (rendered in the visitor's local timezone — see RUNTIME CONTEXT below). Show 3–5 options.
+- When the visitor picks a day, call list_slots for that date. **Do not list every slot the tool returned** — that's overwhelming. Show up to **3 morning** options (before 12:00pm) and up to **3 afternoon** options (12:00pm onward) — six max in total. If the day has many slots, briefly say so: *"Plenty of options that day — here are a few:"*. If the visitor wants more, you can call list_slots again or list more from the same result.
+- If you can tell the visitor's preference (e.g. they said "afternoon works better"), only show afternoon options.
 - For confirmations, render the slot as e.g. "Wednesday 21 May at 3:00pm" — never as a raw UTC string.
 
 # Booking rules — these are strict
@@ -90,6 +92,28 @@ You have three tools for handling consultation bookings. The consultation is 30 
 - Before calling create_booking, confirm one last time: name, email, and the specific slot. Wait for explicit "yes" / "book it" / "confirm". Don't book on ambiguity.
 - If create_booking returns \`slot_unavailable\` (409), tell the visitor the slot was just taken and re-fetch list_slots for the same date. Never retry with a different time you invented.
 - Slot duration is fixed at 30 minutes. Don't try to book partial or longer slots.
+
+# Human handoff (when booking isn't the right fit)
+
+If a visitor wants a human reply but isn't ready to book a 30-minute call right now — they have a complex written question, they prefer email, or they're just exploring — use the **capture_lead** tool to send their details to Alex.
+
+When to offer this:
+- They explicitly ask for a human / for someone to email them back / for a written response.
+- They've described a substantive question but say "I'm not ready to book" or similar.
+- They want to leave a message rather than schedule.
+
+Don't push handoff as the default — always offer booking first if it fits. Handoff is for when booking isn't right.
+
+Flow:
+1. Collect name, email and a quick summary of what they want help with. One or two messages, whatever feels natural — don't make it a form.
+2. Confirm before sending: *"Just to double-check — I'll pass [name] ([email]) through to Alex with the note that [summary]. Sound right?"* Wait for a clear yes.
+3. Call capture_lead with name, email and summary.
+4. On success (tool returns \`ok: true\`):
+   - If \`emailSent: true\`: *"Done — Alex has been notified, and you'll get a confirmation email at [email] shortly. He'll come back to you as soon as he can. If he happens to be around he might also pop into the chat, but no promises."*
+   - If \`emailSent: false\`: same, but skip the confirmation-email sentence.
+5. On error: apologise and suggest emailing [hello@zynx.co](mailto:hello@zynx.co) directly.
+
+After a successful handoff, wind the conversation down — don't keep prompting them. They've done what they came for.
 
 # What you don't do
 
@@ -158,6 +182,30 @@ const TOOLS = [
       required: ['startTime', 'visitorName', 'visitorEmail'],
     },
   },
+  {
+    name: 'capture_lead',
+    description:
+      "Send the visitor's name, email and a summary of their question to Alex (Zynx) for follow-up. Use this when the visitor wants a human reply but does NOT want to book a 30-minute call — they have a complex question, prefer email, or aren't ready to schedule. Only call after the visitor has explicitly provided name, email and what they want to discuss, AND confirmed they want this sent.",
+    input_schema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          description: "The visitor's name (1-100 characters).",
+        },
+        email: {
+          type: 'string',
+          description: "The visitor's email address.",
+        },
+        summary: {
+          type: 'string',
+          description:
+            "A short summary (1-3 sentences) of what they want to discuss or get help with.",
+        },
+      },
+      required: ['name', 'email', 'summary'],
+    },
+  },
 ]
 
 const WEEKDAYS = [
@@ -207,6 +255,19 @@ function localTimeLabel(utcStart, timezone) {
   } catch {
     return utcStart
   }
+}
+
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+function truncate(s, max = 500) {
+  const str = String(s ?? '')
+  return str.length > max ? `${str.slice(0, max)}…` : str
 }
 
 function dynamicContext({ timezone, currentDate }) {
@@ -294,6 +355,117 @@ async function executeTool(name, input, ctx) {
         endTime: r.data?.endTime,
       }
     }
+    if (name === 'capture_lead') {
+      const slackWebhook = process.env.SLACK_WEBHOOK
+      const resendKey = process.env.RESEND_API_KEY
+      const emailFrom = process.env.EMAIL_FROM
+
+      if (!slackWebhook) {
+        return {
+          error: 'config',
+          message: 'Lead capture is not configured. Tell the visitor to email hello@zynx.co directly.',
+        }
+      }
+
+      const visitorName = String(input?.name || '').trim()
+      const visitorEmail = String(input?.email || '').trim()
+      const summary = String(input?.summary || '').trim()
+      if (!visitorName || !visitorEmail || !summary) {
+        return { error: 'missing_fields', message: 'Name, email and summary are all required.' }
+      }
+
+      const userMessages = (ctx.transcript || [])
+        .filter((m) => m.role === 'user' && typeof m.content === 'string')
+        .map((m) => truncate(m.content, 500))
+        .slice(-5)
+      const transcriptExcerpt =
+        userMessages.length === 0
+          ? '(no transcript available)'
+          : userMessages.map((m) => `> ${m.replace(/\n/g, '\n> ')}`).join('\n\n')
+
+      const slackPayload = {
+        text: `:speech_balloon: New lead from zynx.uk chat — ${visitorName}`,
+        blocks: [
+          {
+            type: 'header',
+            text: { type: 'plain_text', text: 'New lead from zynx.uk chat' },
+          },
+          {
+            type: 'section',
+            fields: [
+              { type: 'mrkdwn', text: `*Name*\n${visitorName}` },
+              { type: 'mrkdwn', text: `*Email*\n<mailto:${visitorEmail}|${visitorEmail}>` },
+            ],
+          },
+          {
+            type: 'section',
+            text: { type: 'mrkdwn', text: `*Summary*\n${summary}` },
+          },
+          {
+            type: 'section',
+            text: { type: 'mrkdwn', text: `*Transcript excerpt*\n${transcriptExcerpt}` },
+          },
+          {
+            type: 'context',
+            elements: [
+              { type: 'mrkdwn', text: `Captured at ${new Date().toISOString()}` },
+            ],
+          },
+        ],
+      }
+
+      let slackOk = false
+      try {
+        const r = await fetch(slackWebhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(slackPayload),
+        })
+        slackOk = r.ok
+        if (!slackOk) {
+          console.error('[capture_lead] Slack non-OK:', r.status, await r.text().catch(() => ''))
+        }
+      } catch (err) {
+        console.error('[capture_lead] Slack fetch error:', err)
+        return { error: 'slack_failed', message: 'Could not reach Slack. Tell the visitor to email hello@zynx.co directly.' }
+      }
+      if (!slackOk) {
+        return { error: 'slack_failed', message: 'Slack rejected the notification. Tell the visitor to email hello@zynx.co directly.' }
+      }
+
+      let emailSent = false
+      if (resendKey && emailFrom) {
+        try {
+          const html = `<p>Hi ${escapeHtml(visitorName)},</p>
+<p>Thanks for getting in touch via the Zynx chatbot. Alex will email you back as soon as he's free.</p>
+<p>For reference, here's what you mentioned:</p>
+<blockquote style="border-left: 3px solid #6417a3; padding-left: 12px; color: #555; margin: 12px 0;">${escapeHtml(summary)}</blockquote>
+<p>If you'd rather book a free 30-minute call directly, you can do that at <a href="https://zynx.uk/contact">zynx.uk/contact</a>.</p>
+<p>— The Zynx team</p>`
+          const r = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${resendKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              from: emailFrom,
+              to: [visitorEmail],
+              subject: 'Thanks — we got your message',
+              html,
+            }),
+          })
+          emailSent = r.ok
+          if (!emailSent) {
+            console.error('[capture_lead] Resend non-OK:', r.status, await r.text().catch(() => ''))
+          }
+        } catch (err) {
+          console.error('[capture_lead] Resend fetch error:', err)
+        }
+      }
+
+      return { ok: true, slackSent: true, emailSent }
+    }
     return { error: 'unknown_tool', message: `Unknown tool: ${name}` }
   } catch (err) {
     return { error: 'tool_exception', message: String(err?.message || err) }
@@ -352,7 +524,7 @@ export async function handleChat(body) {
       : 'Europe/London'
   const currentDate = new Date().toISOString().slice(0, 10)
   const booqKey = process.env.BOOQ_API_KEY
-  const ctx = { booqKey, timezone }
+  const ctx = { booqKey, timezone, transcript: cleaned }
 
   const client = new Anthropic({ apiKey })
   const conversation = [...cleaned]
