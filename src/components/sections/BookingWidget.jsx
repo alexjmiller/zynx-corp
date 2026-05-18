@@ -1,7 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useId } from 'react'
 
 const API_BASE = 'https://booq.now'
 const API_KEY = 'bkr_3cb7642e6240fb9d514cd065ed83dae4cae32d205245238949b140536573552e'
+
+const WEEKDAY_LABELS = [
+  { short: 'Su', full: 'Sunday' },
+  { short: 'Mo', full: 'Monday' },
+  { short: 'Tu', full: 'Tuesday' },
+  { short: 'We', full: 'Wednesday' },
+  { short: 'Th', full: 'Thursday' },
+  { short: 'Fr', full: 'Friday' },
+  { short: 'Sa', full: 'Saturday' },
+]
 
 export default function BookingWidget({ slug }) {
   const [step, setStep] = useState('date')
@@ -16,6 +26,11 @@ export default function BookingWidget({ slug }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [booking, setBooking] = useState(null)
+
+  // Stable ids so the form labels can associate with their inputs.
+  const nameId = useId()
+  const emailId = useId()
+  const notesId = useId()
 
   const headers = {
     Authorization: `Bearer ${API_KEY}`,
@@ -104,6 +119,15 @@ export default function BookingWidget({ slug }) {
     })
   }
 
+  function fullDateLabel(dateStr) {
+    const date = new Date(dateStr + 'T00:00:00')
+    return date.toLocaleDateString(undefined, {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+    })
+  }
+
   function buildCalendar() {
     const now = new Date()
     const year = now.getFullYear()
@@ -132,8 +156,8 @@ export default function BookingWidget({ slug }) {
   if (step === 'confirmed' && booking) {
     return (
       <div className="p-8 text-center">
-        <div className="text-accent text-4xl mb-4">&#10003;</div>
-        <h3 className="text-xl text-text mb-2">Booking Confirmed</h3>
+        <div className="text-accent text-4xl mb-4" aria-hidden="true">&#10003;</div>
+        <h2 className="text-xl text-text mb-2">Booking confirmed</h2>
         <p className="text-text-muted">
           {new Date(booking.startTime).toLocaleDateString(undefined, {
             weekday: 'long',
@@ -152,13 +176,18 @@ export default function BookingWidget({ slug }) {
   return (
     <div className="p-8 min-h-[400px]">
       {error && (
-        <div className="mb-4 p-3 rounded bg-red-900/30 border border-red-800 text-red-300 text-sm">
-          {error}
+        <div
+          role="alert"
+          className="mb-4 p-3 rounded bg-red-900/30 border border-red-800 text-red-300 text-sm flex items-start justify-between gap-3"
+        >
+          <span>{error}</span>
           <button
+            type="button"
             onClick={() => setError(null)}
-            className="ml-2 text-red-400 hover:text-red-200"
+            aria-label="Dismiss error"
+            className="text-red-400 hover:text-red-200 shrink-0"
           >
-            &times;
+            <span aria-hidden="true">&times;</span>
           </button>
         </div>
       )}
@@ -167,35 +196,41 @@ export default function BookingWidget({ slug }) {
         const { cells, label } = buildCalendar()
         return (
           <div>
-            <h3 className="text-xl text-text mb-1">Select a Date</h3>
+            <h2 className="text-xl text-text mb-1">Select a date</h2>
             <p className="text-sm text-text-muted mb-4">{label}</p>
-            {loading && <p className="text-text-muted">Loading availability...</p>}
+            {loading && <p className="text-text-muted">Loading availability&hellip;</p>}
             {!loading && availableDays.length === 0 && (
               <p className="text-text-muted">No availability this month.</p>
             )}
             {!loading && availableDays.length > 0 && (
               <div>
-                <div className="grid grid-cols-7 gap-1 mb-1">
-                  {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                    <div key={d} className="text-center text-xs text-text-muted py-1">{d}</div>
+                <div className="grid grid-cols-7 gap-1 mb-1" aria-hidden="true">
+                  {WEEKDAY_LABELS.map(({ short }) => (
+                    <div key={short} className="text-center text-xs text-text-muted py-1">{short}</div>
                   ))}
                 </div>
-                <div className="grid grid-cols-7 gap-1">
+                <div
+                  className="grid grid-cols-7 gap-1"
+                  role="group"
+                  aria-label={`Available dates in ${label}`}
+                >
                   {cells.map((cell, i) =>
                     cell.day === null ? (
-                      <div key={`empty-${i}`} />
+                      <div key={`empty-${i}`} aria-hidden="true" />
                     ) : cell.available && !cell.past ? (
                       <button
+                        type="button"
                         key={cell.dateStr}
                         onClick={() => setSelectedDate(cell.dateStr)}
-                        className="aspect-square flex items-center justify-center rounded-lg text-sm
-                          text-text hover:bg-accent hover:text-white transition-colors"
+                        aria-label={fullDateLabel(cell.dateStr)}
+                        className="aspect-square flex items-center justify-center rounded-lg text-sm text-text hover:bg-accent hover:text-white transition-colors"
                       >
                         {cell.day}
                       </button>
                     ) : (
                       <div
                         key={cell.dateStr}
+                        aria-hidden="true"
                         className="aspect-square flex items-center justify-center rounded-lg text-sm text-text-muted/40"
                       >
                         {cell.day}
@@ -212,21 +247,28 @@ export default function BookingWidget({ slug }) {
       {step === 'time' && (
         <div>
           <button
+            type="button"
             onClick={() => { setStep('date'); setSlots([]); setSelectedDate(null) }}
             className="text-sm text-text-muted hover:text-text transition-colors mb-4 inline-block"
+            aria-label="Back to date selection"
           >
-            &larr; Back
+            <span aria-hidden="true">&larr;</span> Back
           </button>
-          <h3 className="text-xl text-text mb-2">Select a Time</h3>
+          <h2 className="text-xl text-text mb-2">Select a time</h2>
           <p className="text-sm text-text-muted mb-6">{formatDateLabel(selectedDate)}</p>
-          {loading && <p className="text-text-muted">Loading times...</p>}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {loading && <p className="text-text-muted">Loading times&hellip;</p>}
+          <div
+            className="grid grid-cols-2 sm:grid-cols-3 gap-3"
+            role="group"
+            aria-label={`Available times on ${formatDateLabel(selectedDate)}`}
+          >
             {slots.map((slot) => (
               <button
+                type="button"
                 key={slot.start}
                 onClick={() => handleSelectSlot(slot)}
-                className="px-4 py-3 rounded-lg border border-background text-text-muted
-                  hover:border-accent hover:text-text transition-colors text-sm"
+                aria-label={`${formatTime(slot.start)} to ${formatTime(slot.end)}`}
+                className="px-4 py-3 rounded-lg border border-background text-text-muted hover:border-accent hover:text-text transition-colors text-sm"
               >
                 {formatTime(slot.start)} &ndash; {formatTime(slot.end)}
               </button>
@@ -241,55 +283,63 @@ export default function BookingWidget({ slug }) {
             type="button"
             onClick={() => setStep('time')}
             className="text-sm text-text-muted hover:text-text transition-colors mb-4 inline-block"
+            aria-label="Back to time selection"
           >
-            &larr; Back
+            <span aria-hidden="true">&larr;</span> Back
           </button>
-          <h3 className="text-xl text-text mb-2">Your Details</h3>
+          <h2 className="text-xl text-text mb-2">Your details</h2>
           <p className="text-sm text-text-muted mb-6">
             {formatDateLabel(selectedDate)} at {formatTime(selectedSlot.start)}
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm text-text-muted mb-1">Name</label>
+              <label htmlFor={nameId} className="block text-sm text-text-muted mb-1">
+                Name
+              </label>
               <input
+                id={nameId}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-background border border-background
-                  text-text placeholder-text-muted/50 focus:border-accent focus:outline-none transition-colors"
+                autoComplete="name"
+                className="w-full px-4 py-2 rounded-lg bg-background border border-background text-text placeholder-text-muted/50 focus:border-accent transition-colors"
                 placeholder="Your name"
               />
             </div>
             <div>
-              <label className="block text-sm text-text-muted mb-1">Email</label>
+              <label htmlFor={emailId} className="block text-sm text-text-muted mb-1">
+                Email
+              </label>
               <input
+                id={emailId}
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2 rounded-lg bg-background border border-background
-                  text-text placeholder-text-muted/50 focus:border-accent focus:outline-none transition-colors"
+                autoComplete="email"
+                className="w-full px-4 py-2 rounded-lg bg-background border border-background text-text placeholder-text-muted/50 focus:border-accent transition-colors"
                 placeholder="your@email.com"
               />
             </div>
             <div>
-              <label className="block text-sm text-text-muted mb-1">Notes (optional)</label>
+              <label htmlFor={notesId} className="block text-sm text-text-muted mb-1">
+                Notes <span className="text-text-muted">(optional)</span>
+              </label>
               <textarea
+                id={notesId}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
-                className="w-full px-4 py-2 rounded-lg bg-background border border-background
-                  text-text placeholder-text-muted/50 focus:border-accent focus:outline-none transition-colors resize-none"
+                className="w-full px-4 py-2 rounded-lg bg-background border border-background text-text placeholder-text-muted/50 focus:border-accent transition-colors resize-none"
                 placeholder="Tell us about your project..."
               />
             </div>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-lg bg-accent text-white font-normal
-                hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 rounded-lg bg-accent text-white font-normal hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Booking...' : 'Confirm Booking'}
+              {loading ? 'Booking…' : 'Confirm booking'}
             </button>
           </form>
         </div>

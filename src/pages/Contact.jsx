@@ -44,9 +44,9 @@ export default function Contact() {
             <div className="space-y-6">
               <div id="email" className="scroll-mt-24">
               <Card hover={false} className="p-8">
-                <h3 className="text-xl font-normal text-text mb-4">
+                <h2 className="text-xl font-normal text-text mb-4">
                   Email Us
-                </h3>
+                </h2>
                 <p className="text-text-muted mb-4">
                   Prefer email? Send us a message and we'll respond within 24 hours.
                 </p>
@@ -55,9 +55,9 @@ export default function Contact() {
               </div>
 
               <Card hover={false} className="p-8">
-                <h3 className="text-xl font-normal text-text mb-4">
+                <h2 className="text-xl font-normal text-text mb-4">
                   What to Expect
-                </h3>
+                </h2>
                 <ul className="space-y-3 text-sm text-text-muted">
                   <li className="flex items-start gap-3">
                     <span className="text-accent">1.</span>
