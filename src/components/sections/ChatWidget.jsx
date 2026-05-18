@@ -86,6 +86,48 @@ function shouldAutoFocusOnOpen() {
   return window.matchMedia('(hover: hover) and (pointer: fine)').matches
 }
 
+// Track the visual viewport so the chat panel can resize itself to fit
+// above the soft keyboard on iOS Safari. iOS doesn't shrink the layout
+// viewport (or position: fixed bounds) when the keyboard opens, so we
+// have to do it ourselves. Falls back to nulls on browsers without the
+// API — in which case the Tailwind 100dvh fallback applies.
+function useVisualViewport(active) {
+  const [viewport, setViewport] = useState(null)
+
+  useEffect(() => {
+    if (!active) return
+    if (typeof window === 'undefined' || !window.visualViewport) return
+    const vv = window.visualViewport
+    const update = () => {
+      setViewport({ height: vv.height, offsetTop: vv.offsetTop || 0 })
+    }
+    update()
+    vv.addEventListener('resize', update)
+    vv.addEventListener('scroll', update)
+    return () => {
+      vv.removeEventListener('resize', update)
+      vv.removeEventListener('scroll', update)
+    }
+  }, [active])
+
+  return viewport
+}
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false
+    return window.matchMedia('(max-width: 639px)').matches
+  })
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return
+    const mq = window.matchMedia('(max-width: 639px)')
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+  return isMobile
+}
+
 export default function ChatWidget() {
   const initial = loadState()
   const [open, setOpen] = useState(initial.open)
@@ -97,15 +139,20 @@ export default function ChatWidget() {
   const bubbleRef = useRef(null)
   const prevOpen = useRef(initial.open)
 
+  const isMobile = useIsMobile()
+  const viewport = useVisualViewport(open && isMobile)
+
   useEffect(() => {
     saveState({ messages, open })
   }, [messages, open])
 
+  // Keep the messages scrolled to the bottom — including when the keyboard
+  // opens and the visible area shrinks.
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [messages, open])
+  }, [messages, open, viewport])
 
   // Auto-focus the input on open, but only on devices where a soft keyboard
   // won't immediately cover the welcome message.
@@ -214,15 +261,26 @@ export default function ChatWidget() {
         )}
       </button>
 
-      {/* Chat panel — fullscreen on mobile, floating on sm+. Using `dvh`
-          (dynamic viewport height) helps the panel respect the visible
-          viewport rather than the layout viewport (still imperfect on iOS
-          when the soft keyboard is open, but better than `vh`). */}
+      {/* Chat panel — fullscreen on mobile, floating on sm+. On mobile we
+          override the inset/height with a JS-derived value from the visual
+          viewport so the panel resizes to fit above the soft keyboard. */}
       {open && (
         <div
           id="chat-panel"
           role="dialog"
           aria-labelledby="chat-heading"
+          style={
+            isMobile && viewport
+              ? {
+                  position: 'fixed',
+                  top: `${viewport.offsetTop}px`,
+                  left: 0,
+                  right: 0,
+                  bottom: 'auto',
+                  height: `${viewport.height}px`,
+                }
+              : undefined
+          }
           className="fixed z-50 inset-0 sm:inset-auto sm:bottom-24 sm:right-6 sm:w-[380px] h-[100dvh] sm:h-[min(560px,calc(100dvh-8rem))] bg-background-light sm:border sm:border-background sm:rounded-lg sm:shadow-2xl flex flex-col overflow-hidden"
         >
           {/* Header */}
