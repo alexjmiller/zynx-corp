@@ -50,12 +50,7 @@ export default function Contact() {
                 <p className="text-text-muted mb-4">
                   Prefer email? Send us a message and we'll respond within 24 hours.
                 </p>
-                <a
-                  href="mailto:hello@zynx.co"
-                  className="text-accent hover:text-accent-hover transition-colors"
-                >
-                  hello@zynx.co
-                </a>
+                <a href="mailto:hello@zynx.co">hello@zynx.co</a>
               </Card>
               </div>
 

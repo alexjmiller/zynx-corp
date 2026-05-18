@@ -56,26 +56,31 @@ body {
   }
 }
 
-/* Custom link styles. Use the body text colour rather than accent because
-   accent purple on dark fails WCAG AA (1.65:1). Underline preserves
-   affordance; hover shifts to a lighter accent that passes contrast. */
-a {
-  color: var(--color-text);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: color 0.2s ease;
-}
+/* Custom link + focus styles. Wrapped in @layer base so Tailwind utilities
+   (e.g. no-underline, text-text-muted) can override them — unlayered styles
+   beat layered ones in the CSS cascade regardless of specificity. */
+@layer base {
+  /* Use body text colour rather than accent because accent purple on dark
+     fails WCAG AA (1.65:1). Underline preserves affordance; hover shifts to
+     a lighter accent that passes contrast. */
+  a {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+  }
 
-a:hover {
-  color: var(--color-accent-light);
-}
+  a:hover {
+    color: var(--color-accent-light);
+  }
 
-/* Visible focus ring against the dark background. Tailwind v4 doesn't add
-   one by default, and the browser default outline is near-invisible here. */
-:focus-visible {
-  outline: 2px solid var(--color-text);
-  outline-offset: 2px;
-  border-radius: 2px;
+  /* Visible focus ring against the dark background. Tailwind v4 doesn't add
+     one by default, and the browser default outline is near-invisible here. */
+  :focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 }
 
 /* Skip link — visually hidden until focused. Lets keyboard users jump past
