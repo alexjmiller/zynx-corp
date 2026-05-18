@@ -1,5 +1,6 @@
 import Header from './Header'
 import Footer from './Footer'
+import ChatWidget from '../sections/ChatWidget'
 
 export default function Layout({ children }) {
   return (
@@ -9,6 +10,7 @@ export default function Layout({ children }) {
         {children}
       </main>
       <Footer />
+      <ChatWidget />
     </div>
   )
 }
