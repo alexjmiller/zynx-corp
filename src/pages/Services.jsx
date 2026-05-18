@@ -44,7 +44,7 @@ const groups = [
     services: [
       {
         slug: 'ai-skills',
-        title: 'AI Skills',
+        title: 'Harness AI',
         icon: '🤖',
         description:
           "Most AI projects don't move the needle — they're built before anyone asks where AI actually fits. We start by finding the places in your business where AI changes the outcome, then implement it safely with the right guardrails and a clear way to measure the win.",
