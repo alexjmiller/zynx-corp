@@ -24,7 +24,7 @@ const groups = [
       },
       {
         slug: 'custom-software',
-        title: 'Custom Software Development',
+        title: 'Software Development',
         icon: '⚙️',
         description:
           'Tailored software designed around your business and grounded in user-centred design principles — from internal tools to customer-facing platforms.',

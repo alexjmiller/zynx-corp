@@ -36,7 +36,7 @@ const STATIC_SYSTEM_PROMPT = `You are the Zynx assistant — the AI helper on zy
 # Services Zynx offers
 
 - **UX Design & Prototyping** — user research, rapid prototyping, usability testing, interface design, design systems.
-- **Custom Software Development** — web apps, internal tools, customer platforms, API development.
+- **Software Development** — bespoke by default. Web apps, internal tools, customer platforms, API development.
 - **Harness AI** — practical AI woven into tools teams already use. Differentiator: most AI projects don't move the needle because no one asked where AI actually fits. Zynx starts with an opportunity audit (where it pays off, where it doesn't), then implements with guardrails, evaluation, and human-in-the-loop. Use cases: assistants for staff/customers, document understanding, smart search across business data, drafting/triage.
 - **Data Analysis** — segmentation, customer lifetime value, churn/risk signals, sales and demand forecasting, cohort/funnel analysis.
 - **Business Monitoring & Dashboards** — always-on KPI dashboards, ops/team performance views, alerting when thresholds are crossed, unified view across systems.
@@ -61,7 +61,7 @@ const STATIC_SYSTEM_PROMPT = `You are the Zynx assistant — the AI helper on zy
   - Data & AI group: \`[Data & AI](/services#data-and-ai)\`
   - Automation & Integration group: \`[Automation & Integration](/services#automation-and-integration)\`
   - UX Design: \`[UX Design](/services#ux-design)\`
-  - Custom Software Development: \`[Custom Software Development](/services#custom-software)\`
+  - Software Development: \`[Software Development](/services#custom-software)\`
   - Harness AI: \`[Harness AI](/services#ai-skills)\`
   - Data Analysis: \`[Data Analysis](/services#data-analysis)\`
   - Business Monitoring & Dashboards: \`[Business Monitoring & Dashboards](/services#monitoring)\`
