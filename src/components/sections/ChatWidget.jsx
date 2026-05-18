@@ -65,11 +65,15 @@ export default function ChatWidget() {
     setInput('')
     setSending(true)
     try {
+      const tz =
+        typeof Intl !== 'undefined' &&
+        Intl.DateTimeFormat().resolvedOptions().timeZone
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: nextMessages.map(({ role, content }) => ({ role, content })),
+          timezone: tz || 'Europe/London',
         }),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
