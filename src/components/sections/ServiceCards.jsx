@@ -4,19 +4,22 @@ import Card from '../ui/Card'
 
 const services = [
   {
-    title: 'Design & Software',
+    title: 'Design & Build',
+    href: '/services#design-and-build',
     description:
       'User-centred design and custom-built software. Rapid prototyping, web and mobile apps, internal tools and customer platforms — built around the people who use them.',
     icon: '✏️',
   },
   {
-    title: 'AI & Data',
+    title: 'Data & AI',
+    href: '/services#data-and-ai',
     description:
       'Practical AI, data analysis and live dashboards. Unlock patterns in your business data, monitor what matters, and put AI to work where it earns its keep.',
     icon: '🤖',
   },
   {
     title: 'Automation & Integration',
+    href: '/services#automation-and-integration',
     description:
       'Connect your tools and automate the busywork. Data-driven customer notifications, lifecycle comms and seamless flow between the systems you already use.',
     icon: '🔗',
@@ -39,7 +42,7 @@ export default function ServiceCards() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <Link
-              to="/services"
+              to={service.href}
               key={index}
               aria-label={`${service.title} — see details`}
               className="block no-underline"

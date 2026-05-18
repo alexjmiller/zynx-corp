@@ -6,6 +6,7 @@ import Button from '../components/ui/Button'
 const groups = [
   {
     name: 'Design & Build',
+    slug: 'design-and-build',
     services: [
       {
         slug: 'ux-design',
@@ -39,6 +40,7 @@ const groups = [
   },
   {
     name: 'Data & AI',
+    slug: 'data-and-ai',
     services: [
       {
         slug: 'ai-skills',
@@ -86,7 +88,8 @@ const groups = [
     ],
   },
   {
-    name: 'Operations',
+    name: 'Automation & Integration',
+    slug: 'automation-and-integration',
     services: [
       {
         slug: 'automation',
@@ -163,13 +166,13 @@ export default function Services() {
         <Container>
           <div className="space-y-20">
             {groups.map((group) => (
-              <div key={group.name}>
+              <div key={group.slug} id={group.slug} className="scroll-mt-32">
                 <h2 className="text-sm uppercase tracking-widest text-text-muted mb-8">
                   {group.name}
                 </h2>
                 <div className="space-y-12">
                   {group.services.map((service) => (
-                    <div key={service.slug} id={service.slug} className="scroll-mt-24">
+                    <div key={service.slug} id={service.slug} className="scroll-mt-32">
                       <Card hover={false} className="p-8 md:p-12">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                           <div>

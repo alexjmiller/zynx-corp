@@ -1,21 +1,36 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
-// React Router doesn't scroll to URL hash anchors on navigation (or on
-// hash-only changes). This component watches location and scrolls to the
-// element with the matching id when the hash changes.
+// React Router doesn't scroll to URL hash anchors on navigation. This
+// component watches location and scrolls to the matching element.
+//
+// We retry a few times because on mobile, fonts / images / async-loaded
+// content can shift layout after the initial scroll, leaving the target
+// not quite at the top. Multiple staggered attempts settle on the right
+// position regardless of how slow the page renders.
 export default function ScrollToHash() {
   const { hash, pathname } = useLocation()
 
   useEffect(() => {
     if (!hash) return
     const id = decodeURIComponent(hash.slice(1))
-    // Wait one frame so the page has rendered before we look up the element.
-    const raf = requestAnimationFrame(() => {
+
+    const scrollToTarget = () => {
       const el = document.getElementById(id)
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    })
-    return () => cancelAnimationFrame(raf)
+    }
+
+    // Initial scroll on the next frame, then re-scroll after layout has had
+    // time to settle (fonts loaded, images sized, etc).
+    const raf = requestAnimationFrame(scrollToTarget)
+    const t1 = setTimeout(scrollToTarget, 150)
+    const t2 = setTimeout(scrollToTarget, 400)
+
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
   }, [hash, pathname])
 
   return null

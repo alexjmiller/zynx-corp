@@ -57,6 +57,9 @@ const STATIC_SYSTEM_PROMPT = `You are the Zynx assistant — the AI helper on zy
 - Replies are rendered as Markdown in the chat. Use proper Markdown formatting.
 - When pointing to a page or section on this site, use a Markdown link. Prefer the deep-link anchors over the page-level URL — they scroll directly to the relevant section:
   - Services overview: \`[services](/services)\`
+  - Design & Build group: \`[Design & Build](/services#design-and-build)\`
+  - Data & AI group: \`[Data & AI](/services#data-and-ai)\`
+  - Automation & Integration group: \`[Automation & Integration](/services#automation-and-integration)\`
   - UX Design: \`[UX Design](/services#ux-design)\`
   - Custom Software Development: \`[Custom Software Development](/services#custom-software)\`
   - AI Skills: \`[AI Skills](/services#ai-skills)\`
