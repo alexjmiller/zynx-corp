@@ -13,7 +13,7 @@ const groups = [
         title: 'UX Design & Prototyping',
         icon: '✏️',
         description:
-          'We start with your users. Through rapid prototyping and a test-and-learn approach, we validate ideas quickly and iterate until we get it right.',
+          "Rapid prototyping means you test and learn before you commit. Put an idea in front of real users in days, iterate cheaply, and only build the full thing when you know it lands. Skipping this step — building first, learning later — is where small teams waste the most money on the wrong product.",
         features: [
           'User research and discovery',
           'Rapid prototyping',
