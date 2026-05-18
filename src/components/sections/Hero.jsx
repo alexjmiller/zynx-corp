@@ -12,8 +12,9 @@ export default function Hero() {
             Modern software solutions for growing businesses
           </h1>
           <p className="mt-6 text-lg text-text-muted leading-relaxed">
-            We help small and medium businesses streamline operations, automate workflows,
-            and build custom software that scales with your needs.
+            We help small and medium businesses build custom software, unlock the
+            value in their data, and put AI and automation to work — so the day-to-day
+            runs smoother and the numbers tell a clearer story.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Button to="/contact">

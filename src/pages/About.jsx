@@ -22,13 +22,13 @@ export default function About() {
   return (
     <>
       <Helmet>
-        <title>About Zynx - Custom Software for Small & Medium Businesses</title>
-        <meta name="description" content="Learn about Zynx and our mission to provide affordable, high-quality custom software solutions for small and medium businesses." />
-        <meta property="og:title" content="About Zynx - Custom Software for Small & Medium Businesses" />
-        <meta property="og:description" content="Affordable, high-quality custom software solutions for small and medium businesses." />
+        <title>About Zynx - Software, AI & Data Partners for SMBs</title>
+        <meta name="description" content="Learn about Zynx — we help small and medium businesses build custom software, apply AI where it actually moves the needle, and unlock the value in their data." />
+        <meta property="og:title" content="About Zynx - Software, AI & Data Partners for SMBs" />
+        <meta property="og:description" content="Software, AI, data and automation partners for small and medium businesses." />
         <meta property="og:url" content="https://zynx.co/about" />
-        <meta name="twitter:title" content="About Zynx - Custom Software for Small & Medium Businesses" />
-        <meta name="twitter:description" content="Affordable, high-quality custom software solutions for small and medium businesses." />
+        <meta name="twitter:title" content="About Zynx - Software, AI & Data Partners for SMBs" />
+        <meta name="twitter:description" content="Software, AI, data and automation partners for small and medium businesses." />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">
@@ -38,8 +38,9 @@ export default function About() {
               About Zynx
             </h1>
             <p className="mt-6 text-lg text-text-muted leading-relaxed">
-              We're a team of business designers and software developers passionate
-              about helping small and medium businesses leverage technology to grow and succeed.
+              We're a team of designers, developers and data specialists helping small
+              and medium businesses build custom software, put AI to work where it earns
+              its keep, and turn their data into clearer decisions.
             </p>
           </div>
         </Container>

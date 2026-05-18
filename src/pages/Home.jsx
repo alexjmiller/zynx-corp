@@ -8,13 +8,13 @@ export default function Home() {
   return (
     <>
       <Helmet>
-        <title>Zynx - Modern Software Solutions for Growing Businesses</title>
-        <meta name="description" content="Zynx builds custom software, automates workflows, and designs intuitive UX for small and medium businesses. Book a free consultation." />
-        <meta property="og:title" content="Zynx - Modern Software Solutions for Growing Businesses" />
-        <meta property="og:description" content="Custom software, workflow automation, and UX design for small and medium businesses." />
+        <title>Zynx - Software, AI, Data & Automation for Growing Businesses</title>
+        <meta name="description" content="Zynx helps SMBs build custom software, put AI to work where it actually moves the needle, unlock the patterns in their data, and automate the everyday. Book a free consultation." />
+        <meta property="og:title" content="Zynx - Software, AI, Data & Automation for Growing Businesses" />
+        <meta property="og:description" content="Custom software, practical AI, data analysis, dashboards and automation for small and medium businesses." />
         <meta property="og:url" content="https://zynx.co/" />
-        <meta name="twitter:title" content="Zynx - Modern Software Solutions for Growing Businesses" />
-        <meta name="twitter:description" content="Custom software, workflow automation, and UX design for small and medium businesses." />
+        <meta name="twitter:title" content="Zynx - Software, AI, Data & Automation for Growing Businesses" />
+        <meta name="twitter:description" content="Custom software, practical AI, data analysis, dashboards and automation for small and medium businesses." />
       </Helmet>
       <Hero />
       <ServiceCards />

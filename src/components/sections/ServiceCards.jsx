@@ -4,18 +4,21 @@ import Card from '../ui/Card'
 
 const services = [
   {
-    title: 'UX Design & Prototyping',
-    description: 'We start with your users. Rapid prototyping and a test-and-learn approach means we validate ideas quickly and iterate until we get it right.',
+    title: 'Design & Software',
+    description:
+      'User-centred design and custom-built software. Rapid prototyping, web and mobile apps, internal tools and customer platforms — built around the people who use them.',
     icon: '✏️',
   },
   {
-    title: 'Custom Software Development',
-    description: 'Tailored applications grounded in user-centred design. From web apps to internal tools, we build solutions that people actually want to use.',
-    icon: '⚙️',
+    title: 'AI & Data',
+    description:
+      'Practical AI, data analysis and live dashboards. Unlock patterns in your business data, monitor what matters, and put AI to work where it earns its keep.',
+    icon: '🤖',
   },
   {
     title: 'Automation & Integration',
-    description: 'Streamline operations and connect your tools. We automate repetitive tasks and create seamless data flow across your business.',
+    description:
+      'Connect your tools and automate the busywork. Data-driven customer notifications, lifecycle comms and seamless flow between the systems you already use.',
     icon: '🔗',
   },
 ]
@@ -29,7 +32,7 @@ export default function ServiceCards() {
             What we do
           </h2>
           <p className="mt-4 text-text-muted max-w-2xl mx-auto">
-            User-centred design and smart technology to help SMBs work better.
+            User-centred design, AI and smart technology to help SMBs work better.
           </p>
         </div>
 

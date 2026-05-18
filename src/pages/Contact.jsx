@@ -8,12 +8,12 @@ export default function Contact() {
     <>
       <Helmet>
         <title>Contact Us - Book a Free Consultation | Zynx</title>
-        <meta name="description" content="Book a free 30-minute consultation to discuss your software needs. Email us at hello@zynx.co or schedule a call online." />
+        <meta name="description" content="Book a free 30-minute consultation to discuss your software, AI, data or automation project. Email hello@zynx.co or schedule a call online." />
         <meta property="og:title" content="Contact Us - Book a Free Consultation | Zynx" />
-        <meta property="og:description" content="Book a free consultation to discuss your custom software needs." />
+        <meta property="og:description" content="Book a free consultation to discuss your software, AI, data or automation project." />
         <meta property="og:url" content="https://zynx.co/contact" />
         <meta name="twitter:title" content="Contact Us - Book a Free Consultation | Zynx" />
-        <meta name="twitter:description" content="Book a free consultation to discuss your custom software needs." />
+        <meta name="twitter:description" content="Book a free consultation to discuss your software, AI, data or automation project." />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">

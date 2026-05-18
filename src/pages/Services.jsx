@@ -3,53 +3,112 @@ import Container from '../components/ui/Container'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
 
-const services = [
+const groups = [
   {
-    title: 'UX Design & Prototyping',
-    icon: '✏️',
-    description: 'We start with your users. Through rapid prototyping and a test-and-learn approach, we validate ideas quickly and iterate until we get it right.',
-    features: [
-      'User research and discovery',
-      'Rapid prototyping',
-      'Usability testing',
-      'Interface design',
-      'Design systems',
+    name: 'Design & Build',
+    services: [
+      {
+        title: 'UX Design & Prototyping',
+        icon: '✏️',
+        description:
+          'We start with your users. Through rapid prototyping and a test-and-learn approach, we validate ideas quickly and iterate until we get it right.',
+        features: [
+          'User research and discovery',
+          'Rapid prototyping',
+          'Usability testing',
+          'Interface design',
+          'Design systems',
+        ],
+      },
+      {
+        title: 'Custom Software Development',
+        icon: '⚙️',
+        description:
+          'Tailored software designed around your business and grounded in user-centred design principles — from internal tools to customer-facing platforms.',
+        features: [
+          'Web applications and portals',
+          'Mobile-responsive designs',
+          'Internal business tools',
+          'Customer-facing platforms',
+          'API development and integration',
+        ],
+      },
     ],
   },
   {
-    title: 'Custom Software Development',
-    icon: '⚙️',
-    description: 'We build tailored software solutions designed specifically for your business needs, grounded in user-centred design principles.',
-    features: [
-      'Web applications and portals',
-      'Mobile-responsive designs',
-      'Internal business tools',
-      'Customer-facing platforms',
-      'API development and integration',
+    name: 'Data & AI',
+    services: [
+      {
+        title: 'AI Skills',
+        icon: '🤖',
+        description:
+          "Most AI projects don't move the needle — they're built before anyone asks where AI actually fits. We start by finding the places in your business where AI changes the outcome, then implement it safely with the right guardrails and a clear way to measure the win.",
+        features: [
+          'AI opportunity audits — where it pays off, where it doesn\'t',
+          'AI assistants for staff and customers',
+          'Document understanding and extraction',
+          'Smart search across your business data',
+          'Drafting, triage and summarisation',
+          'Safe rollout: guardrails, evaluation, human-in-the-loop',
+        ],
+      },
+      {
+        title: 'Data Analysis',
+        icon: '📊',
+        description:
+          'Turn the data you already have — CRM, sales, support, operations — into clear answers. We surface the patterns and risks hidden in your numbers.',
+        features: [
+          'Customer segmentation and lifetime value',
+          'Churn, risk and retention signals',
+          'Sales and demand forecasting',
+          'Cohort and funnel analysis',
+          'One-off deep-dive investigations',
+        ],
+      },
+      {
+        title: 'Business Monitoring & Dashboards',
+        icon: '📈',
+        description:
+          'Always-on visibility into how your business is performing. Live dashboards for the metrics that matter, with alerts when something needs attention.',
+        features: [
+          'Live KPI and revenue dashboards',
+          'Operational and team performance views',
+          'Custom reports for stakeholders',
+          'Threshold-based alerts and notifications',
+          'Unified view across multiple systems',
+        ],
+      },
     ],
   },
   {
-    title: 'Process Automation',
-    icon: '🔄',
-    description: 'Streamline your operations by automating repetitive tasks and workflows.',
-    features: [
-      'Workflow automation',
-      'Data entry automation',
-      'Report generation',
-      'Email and notification systems',
-      'Scheduled task management',
-    ],
-  },
-  {
-    title: 'Systems Integration',
-    icon: '🔗',
-    description: 'Connect your existing tools and create a unified technology ecosystem.',
-    features: [
-      'CRM integration',
-      'Accounting software connections',
-      'E-commerce platform linking',
-      'Third-party API integration',
-      'Data synchronization',
+    name: 'Operations',
+    services: [
+      {
+        title: 'Process Automation',
+        icon: '🔄',
+        description:
+          'Streamline operations and use your data to drive smarter customer experiences. Automate the repetitive work and trigger the right message at the right moment.',
+        features: [
+          'Workflow and back-office automation',
+          'Data-driven customer notifications',
+          'Lifecycle and onboarding emails',
+          'Escalation and follow-up rules',
+          'Scheduled tasks and report generation',
+        ],
+      },
+      {
+        title: 'Systems Integration',
+        icon: '🔗',
+        description:
+          'Connect your existing tools into one unified ecosystem so data flows where it needs to and your team stops re-keying information.',
+        features: [
+          'CRM integration',
+          'Accounting software connections',
+          'E-commerce platform linking',
+          'Third-party API integration',
+          'Data synchronisation',
+        ],
+      },
     ],
   },
 ]
@@ -58,13 +117,22 @@ export default function Services() {
   return (
     <>
       <Helmet>
-        <title>Our Services - UX Design, Custom Development & Automation | Zynx</title>
-        <meta name="description" content="UX design, custom software development, process automation, and systems integration tailored for small and medium businesses." />
-        <meta property="og:title" content="Our Services - UX Design, Custom Development & Automation | Zynx" />
-        <meta property="og:description" content="UX design, custom software development, process automation, and systems integration tailored for SMBs." />
+        <title>Our Services - Software, AI, Data & Automation | Zynx</title>
+        <meta
+          name="description"
+          content="UX, custom software, AI skills, data analysis, business dashboards, process automation and systems integration — tailored for small and medium businesses."
+        />
+        <meta property="og:title" content="Our Services - Software, AI, Data & Automation | Zynx" />
+        <meta
+          property="og:description"
+          content="UX, custom software, AI, data analysis, dashboards and automation for SMBs."
+        />
         <meta property="og:url" content="https://zynx.co/services" />
-        <meta name="twitter:title" content="Our Services - UX Design, Custom Development & Automation | Zynx" />
-        <meta name="twitter:description" content="UX design, custom software development, process automation, and systems integration tailored for SMBs." />
+        <meta name="twitter:title" content="Our Services - Software, AI, Data & Automation | Zynx" />
+        <meta
+          name="twitter:description"
+          content="UX, custom software, AI, data analysis, dashboards and automation for SMBs."
+        />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">
@@ -74,9 +142,10 @@ export default function Services() {
               Our Services
             </h1>
             <p className="mt-6 text-lg text-text-muted leading-relaxed">
-              We take a user-centred approach to everything we build. Through research,
-              prototyping, and iteration, we create software solutions that truly work
-              for the people who use them—helping small and medium businesses thrive.
+              We help small and medium businesses get more from their software, their data
+              and their day-to-day operations. From user-centred design through to AI,
+              dashboards and automation — everything we build is grounded in what your
+              business actually needs.
             </p>
           </div>
         </Container>
@@ -85,31 +154,43 @@ export default function Services() {
       {/* Services Detail */}
       <section className="py-6">
         <Container>
-          <div className="space-y-16">
-            {services.map((service, index) => (
-              <Card key={index} hover={false} className="p-8 md:p-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                  <div>
-                    <div className="text-4xl mb-4">{service.icon}</div>
-                    <h2 className="text-2xl md:text-3xl font-normal text-text mb-4">
-                      {service.title}
-                    </h2>
-                    <p className="text-text-muted leading-relaxed">
-                      {service.description}
-                    </p>
-                  </div>
-                  <div>
-                    <ul className="space-y-3">
-                      {service.features.map((feature, fIndex) => (
-                        <li key={fIndex} className="flex items-start gap-3 text-text-muted">
-                          <span className="text-text font-normal">–</span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+          <div className="space-y-20">
+            {groups.map((group) => (
+              <div key={group.name}>
+                <h2 className="text-sm uppercase tracking-widest text-text-muted mb-8">
+                  {group.name}
+                </h2>
+                <div className="space-y-12">
+                  {group.services.map((service) => (
+                    <Card key={service.title} hover={false} className="p-8 md:p-12">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        <div>
+                          <div className="text-4xl mb-4">{service.icon}</div>
+                          <h3 className="text-2xl md:text-3xl font-normal text-text mb-4">
+                            {service.title}
+                          </h3>
+                          <p className="text-text-muted leading-relaxed">
+                            {service.description}
+                          </p>
+                        </div>
+                        <div>
+                          <ul className="space-y-3">
+                            {service.features.map((feature, fIndex) => (
+                              <li
+                                key={fIndex}
+                                className="flex items-start gap-3 text-text-muted"
+                              >
+                                <span className="text-text font-normal">–</span>
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </Container>
