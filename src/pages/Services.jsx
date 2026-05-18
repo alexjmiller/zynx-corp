@@ -176,7 +176,7 @@ export default function Services() {
                       <Card hover={false} className="p-8 md:p-12">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                           <div>
-                            <div className="text-4xl mb-4">{service.icon}</div>
+                            <div className="text-4xl mb-4" aria-hidden="true">{service.icon}</div>
                             <h3 className="text-2xl md:text-3xl font-normal text-text mb-4">
                               {service.title}
                             </h3>
