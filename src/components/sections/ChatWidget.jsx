@@ -1,6 +1,53 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { Link } from 'react-router-dom'
+import Markdown from 'markdown-to-jsx'
 
 const STORAGE_KEY = 'zynx-chat-v1'
+
+function MarkdownLink({ href, children, ...rest }) {
+  if (!href) return <span>{children}</span>
+  const isExternal =
+    /^https?:\/\//.test(href) ||
+    href.startsWith('mailto:') ||
+    href.startsWith('tel:')
+  const className = 'underline text-text hover:text-accent transition-colors'
+  if (isExternal) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className} {...rest}>
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link to={href} className={className} {...rest}>
+      {children}
+    </Link>
+  )
+}
+
+function MarkdownParagraph({ children }) {
+  return <p className="m-0 mt-2 first:mt-0">{children}</p>
+}
+
+const MARKDOWN_OPTIONS = {
+  forceBlock: true,
+  overrides: {
+    a: { component: MarkdownLink },
+    p: { component: MarkdownParagraph },
+    h1: { component: MarkdownParagraph },
+    h2: { component: MarkdownParagraph },
+    h3: { component: MarkdownParagraph },
+    h4: { component: MarkdownParagraph },
+    h5: { component: MarkdownParagraph },
+    h6: { component: MarkdownParagraph },
+    img: { component: () => null },
+    iframe: { component: () => null },
+    script: { component: () => null },
+    ul: { props: { className: 'list-disc pl-5 my-2 space-y-1' } },
+    ol: { props: { className: 'list-decimal pl-5 my-2 space-y-1' } },
+    code: { props: { className: 'px-1 py-0.5 rounded bg-background-light text-text text-xs' } },
+  },
+}
 
 const WELCOME_MESSAGE = {
   role: 'assistant',
@@ -158,13 +205,17 @@ export default function ChatWidget() {
                 className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[85%] px-3 py-2 rounded-lg text-sm leading-relaxed whitespace-pre-wrap ${
+                  className={`max-w-[85%] px-3 py-2 rounded-lg text-sm leading-relaxed ${
                     m.role === 'user'
-                      ? 'bg-accent text-text'
+                      ? 'bg-accent text-text whitespace-pre-wrap'
                       : 'bg-background text-text-muted'
                   }`}
                 >
-                  {m.content}
+                  {m.role === 'user' ? (
+                    m.content
+                  ) : (
+                    <Markdown options={MARKDOWN_OPTIONS}>{m.content}</Markdown>
+                  )}
                 </div>
               </div>
             ))}
