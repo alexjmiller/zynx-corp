@@ -26,9 +26,12 @@ export default function About() {
         <meta name="description" content="Learn about Zynx — we help small and medium businesses build custom software, apply AI where it actually moves the needle, and unlock the value in their data." />
         <meta property="og:title" content="About Zynx - Software, AI & Data Partners for SMBs" />
         <meta property="og:description" content="Software, AI, data and automation partners for small and medium businesses." />
-        <meta property="og:url" content="https://zynx.co/about" />
+        <meta property="og:url" content="https://zynx.uk/about" />
+        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About Zynx - Software, AI & Data Partners for SMBs" />
         <meta name="twitter:description" content="Software, AI, data and automation partners for small and medium businesses." />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">

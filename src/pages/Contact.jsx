@@ -11,9 +11,12 @@ export default function Contact() {
         <meta name="description" content="Book a free 30-minute consultation to discuss your software, AI, data or automation project. Email hello@zynx.co or schedule a call online." />
         <meta property="og:title" content="Contact Us - Book a Free Consultation | Zynx" />
         <meta property="og:description" content="Book a free consultation to discuss your software, AI, data or automation project." />
-        <meta property="og:url" content="https://zynx.co/contact" />
+        <meta property="og:url" content="https://zynx.uk/contact" />
+        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Contact Us - Book a Free Consultation | Zynx" />
         <meta name="twitter:description" content="Book a free consultation to discuss your software, AI, data or automation project." />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">

@@ -15,12 +15,15 @@ export default function Terms() {
           property="og:description"
           content="The terms that apply when you use the zynx.uk website and chatbot."
         />
-        <meta property="og:url" content="https://zynx.co/terms" />
+        <meta property="og:url" content="https://zynx.uk/terms" />
+        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Terms of Use | Zynx" />
         <meta
           name="twitter:description"
           content="The terms that apply when you use the zynx.uk website and chatbot."
         />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
       </Helmet>
 
       <section className="pt-24 pb-16">

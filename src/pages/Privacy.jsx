@@ -15,12 +15,15 @@ export default function Privacy() {
           property="og:description"
           content="How Zynx collects, uses and protects your information."
         />
-        <meta property="og:url" content="https://zynx.co/privacy" />
+        <meta property="og:url" content="https://zynx.uk/privacy" />
+        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Privacy Policy | Zynx" />
         <meta
           name="twitter:description"
           content="How Zynx collects, uses and protects your information."
         />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
       </Helmet>
 
       <section className="pt-24 pb-16">

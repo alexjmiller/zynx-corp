@@ -12,9 +12,12 @@ export default function Home() {
         <meta name="description" content="Zynx helps SMBs build custom software, put AI to work where it actually moves the needle, unlock the patterns in their data, and automate the everyday. Book a free consultation." />
         <meta property="og:title" content="Zynx - Software, AI, Data & Automation for Growing Businesses" />
         <meta property="og:description" content="Custom software, practical AI, data analysis, dashboards and automation for small and medium businesses." />
-        <meta property="og:url" content="https://zynx.co/" />
+        <meta property="og:url" content="https://zynx.uk/" />
+        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Zynx - Software, AI, Data & Automation for Growing Businesses" />
         <meta name="twitter:description" content="Custom software, practical AI, data analysis, dashboards and automation for small and medium businesses." />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
       </Helmet>
       <Hero />
       <ServiceCards />

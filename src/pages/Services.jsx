@@ -137,12 +137,15 @@ export default function Services() {
           property="og:description"
           content="UX, custom software, AI, data analysis, dashboards and automation for SMBs."
         />
-        <meta property="og:url" content="https://zynx.co/services" />
+        <meta property="og:url" content="https://zynx.uk/services" />
+        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Our Services - Software, AI, Data & Automation | Zynx" />
         <meta
           name="twitter:description"
           content="UX, custom software, AI, data analysis, dashboards and automation for SMBs."
         />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">

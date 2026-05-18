@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zynx — Software, AI, Data and Automation for growing businesses">
+  <!-- Dark background matching site theme -->
+  <rect width="1200" height="630" fill="#282828"/>
+
+  <!-- Subtle radial vignette to add depth -->
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#333333" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#282828" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#vignette)"/>
+
+  <!-- Octahedron mark, scaled-up favicon, top-left -->
+  <g transform="translate(80, 80)">
+    <circle cx="40" cy="40" r="40" fill="#6417a3"/>
+    <polygon points="40,10 74.5,69.9 5.5,69.9" fill="#ffffff"/>
+    <polygon points="40,10 74.5,30.1 74.5,69.9" fill="#d8d8d8"/>
+    <polygon points="40,10 5.5,69.9 5.5,30.1" fill="#e4e4e4"/>
+  </g>
+
+  <!-- Centred wordmark + tagline -->
+  <g text-anchor="middle" font-family="Montserrat, 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <!-- "zynx" wordmark — bold, very large -->
+    <text x="600" y="310" fill="#d5d5d5" font-weight="700" font-size="220" letter-spacing="-4">zynx</text>
+
+    <!-- Purple accent line under wordmark -->
+    <line x1="540" y1="360" x2="660" y2="360" stroke="#6417a3" stroke-width="4"/>
+
+    <!-- Tagline -->
+    <text x="600" y="430" fill="#a5a5a5" font-weight="400" font-size="40" letter-spacing="2">
+      Software  ·  AI  ·  Data  ·  Automation
+    </text>
+
+    <!-- Sub-tagline -->
+    <text x="600" y="485" fill="#838383" font-weight="300" font-size="26">
+      for small and medium businesses
+    </text>
+  </g>
+
+  <!-- URL bottom-right -->
+  <text x="1120" y="585" text-anchor="end" fill="#838383" font-family="Montserrat, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="400" font-size="22">
+    zynx.uk
+  </text>
+</svg>
