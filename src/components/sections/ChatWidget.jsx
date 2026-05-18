@@ -389,6 +389,18 @@ export default function ChatWidget() {
               Send
             </button>
           </div>
+
+          {/* Transparency: link to the privacy policy, which explains the
+              AI sub-processor and data handling. Kept subtle. */}
+          <p className="px-3 pb-3 text-xs text-text-muted text-center m-0">
+            <Link
+              to="/privacy"
+              onClick={() => setOpen(false)}
+              className="underline hover:text-text transition-colors"
+            >
+              Privacy
+            </Link>
+          </p>
         </div>
       )}
     </>

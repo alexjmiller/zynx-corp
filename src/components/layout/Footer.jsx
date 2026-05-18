@@ -50,10 +50,22 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-background">
-          <p className="text-sm text-text-muted text-center">
+        <div className="mt-12 pt-8 border-t border-background flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-text-muted">
             © {currentYear} Zynx. All rights reserved.
           </p>
+          <ul className="flex items-center gap-6 text-sm">
+            <li>
+              <Link to="/privacy" className="no-underline !text-text-muted hover:!text-text transition-colors">
+                Privacy
+              </Link>
+            </li>
+            <li>
+              <Link to="/terms" className="no-underline !text-text-muted hover:!text-text transition-colors">
+                Terms
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
     </footer>
