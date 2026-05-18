@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <Link to="/" className="text-3xl font-normal !text-text hover:!text-text-muted transition-colors">
+            <Link to="/" className="text-3xl font-normal no-underline !text-text hover:!text-text-muted transition-colors">
               zynx
             </Link>
             <p className="mt-4 text-sm text-text-muted">
@@ -16,31 +16,31 @@ export default function Footer() {
             </p>
           </div>
 
-          <div>
+          <nav aria-label="Footer">
             <h4 className="text-sm font-normal text-text mb-4">Navigation</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-sm !text-text-muted hover:!text-text transition-colors">
+                <Link to="/" className="text-sm no-underline !text-text-muted hover:!text-text transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="text-sm !text-text-muted hover:!text-text transition-colors">
+                <Link to="/services" className="text-sm no-underline !text-text-muted hover:!text-text transition-colors">
                   Services
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-sm !text-text-muted hover:!text-text transition-colors">
+                <Link to="/about" className="text-sm no-underline !text-text-muted hover:!text-text transition-colors">
                   About
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-sm !text-text-muted hover:!text-text transition-colors">
+                <Link to="/contact" className="text-sm no-underline !text-text-muted hover:!text-text transition-colors">
                   Contact
                 </Link>
               </li>
             </ul>
-          </div>
+          </nav>
 
           <div>
             <h4 className="text-sm font-normal text-text mb-4">Contact</h4>

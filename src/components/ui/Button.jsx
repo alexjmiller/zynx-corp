@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 
 export default function Button({ children, to, href, variant = 'primary', className = '', ...props }) {
-  const baseStyles = 'inline-flex items-center justify-center px-6 py-3 text-sm font-normal rounded transition-all duration-200 hover:-translate-y-1 hover:translate-x-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(100,23,163,0.8)]'
+  const baseStyles = 'inline-flex items-center justify-center px-6 py-3 text-sm font-normal rounded no-underline transition-all duration-200 motion-reduce:transition-none hover:-translate-y-1 hover:translate-x-[-2px] hover:shadow-[4px_4px_0px_0px_rgba(100,23,163,0.8)] motion-reduce:hover:translate-x-0 motion-reduce:hover:translate-y-0'
 
   const variants = {
     primary: 'bg-accent !text-white hover:!text-white',

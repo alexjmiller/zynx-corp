@@ -5,12 +5,22 @@
   --color-background: #282828;
   --color-background-light: #333333;
   --color-text: #d5d5d5;
-  --color-text-muted: #838383;
+  /* Bumped from #838383 (3.87:1 — fails WCAG AA) to #a5a5a5 (≈5.96:1 — passes) */
+  --color-text-muted: #a5a5a5;
   --color-accent: #6417a3;
   --color-accent-hover: #7a1fc4;
+  /* Lighter accent for use as text/link colour where AA contrast is needed
+     on the dark background. ≈4.8:1 against #282828. */
+  --color-accent-light: #b986e5;
 
   /* Font family */
   --font-sans: 'Montserrat', sans-serif;
+
+  /* Tier-shifted font scale for readability. Body sizes are bumped one tier:
+     12 → 14, 14 → 16, 16 → 18. Display sizes left alone. */
+  --text-xs: 0.875rem;   /* 14px */
+  --text-sm: 1rem;       /* 16px */
+  --text-base: 1.125rem; /* 18px */
 }
 
 /* Base styles */
@@ -27,18 +37,64 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* Smooth scrolling — but only when the user hasn't asked for reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-/* Custom link styles */
+/* Strip animation/transition for users who've asked for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom link styles. Use the body text colour rather than accent because
+   accent purple on dark fails WCAG AA (1.65:1). Underline preserves
+   affordance; hover shifts to a lighter accent that passes contrast. */
 a {
-  color: var(--color-accent);
-  text-decoration: none;
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--color-accent-hover);
+  color: var(--color-accent-light);
+}
+
+/* Visible focus ring against the dark background. Tailwind v4 doesn't add
+   one by default, and the browser default outline is near-invisible here. */
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Skip link — visually hidden until focused. Lets keyboard users jump past
+   the header to the main content. */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--color-text);
+  color: var(--color-background);
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(-100%);
+  transition: transform 0.15s ease;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  color: var(--color-background);
 }

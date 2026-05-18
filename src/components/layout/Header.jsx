@@ -5,17 +5,17 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navLinkClass = ({ isActive }) =>
-    `text-sm transition-colors ${isActive ? '!text-text' : '!text-text-muted hover:!text-text'}`
+    `text-sm no-underline transition-colors ${isActive ? '!text-text' : '!text-text-muted hover:!text-text'}`
 
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-background-light">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link to="/" className="text-5xl font-bold !text-text hover:!text-text-muted transition-colors">
+        <Link to="/" className="text-5xl font-bold no-underline !text-text hover:!text-text-muted transition-colors">
           zynx
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav aria-label="Primary" className="hidden md:flex items-center gap-8">
           <NavLink to="/" className={navLinkClass}>Home</NavLink>
           <NavLink to="/services" className={navLinkClass}>Services</NavLink>
           <NavLink to="/about" className={navLinkClass}>About</NavLink>
@@ -24,9 +24,12 @@ export default function Header() {
 
         {/* Mobile Menu Button */}
         <button
+          type="button"
           className="md:hidden text-text-muted hover:text-text transition-colors"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
+          aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-nav"
         >
           <svg
             className="w-6 h-6"
@@ -45,7 +48,7 @@ export default function Header() {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <nav className="md:hidden border-t border-background-light">
+        <nav id="mobile-nav" aria-label="Mobile primary" className="md:hidden border-t border-background-light">
           <div className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4">
             <NavLink to="/" className={navLinkClass} onClick={() => setIsMenuOpen(false)}>Home</NavLink>
             <NavLink to="/services" className={navLinkClass} onClick={() => setIsMenuOpen(false)}>Services</NavLink>

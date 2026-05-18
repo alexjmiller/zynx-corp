@@ -38,9 +38,14 @@ export default function ServiceCards() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Link to="/services" key={index}>
+            <Link
+              to="/services"
+              key={index}
+              aria-label={`${service.title} — see details`}
+              className="block no-underline"
+            >
               <Card className="h-full">
-                <div className="text-3xl mb-4">{service.icon}</div>
+                <div className="text-3xl mb-4" aria-hidden="true">{service.icon}</div>
                 <h3 className="text-xl font-normal text-text mb-3">
                   {service.title}
                 </h3>
