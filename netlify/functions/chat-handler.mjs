@@ -55,7 +55,15 @@ export async function handleChat(body) {
     return { message: { role: 'assistant', content: stubReply(cleaned) } }
   }
 
-  if (cleaned.length === 0 || cleaned[0].role !== 'user') {
+  // The widget shows a locally-rendered welcome message as the first
+  // assistant turn — it's UI, not part of the conversation. Strip any
+  // leading assistant messages so the payload starts with a user turn,
+  // which the Anthropic API requires.
+  while (cleaned.length > 0 && cleaned[0].role === 'assistant') {
+    cleaned.shift()
+  }
+
+  if (cleaned.length === 0) {
     return {
       message: {
         role: 'assistant',
