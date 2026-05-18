@@ -41,8 +41,14 @@ const STATIC_SYSTEM_PROMPT = `You are the Zynx assistant — the AI helper on zy
 - Replies are rendered as Markdown in the chat. Use proper Markdown formatting.
 - When pointing to a page on this site, use a Markdown link with the path — e.g. \`[contact page](/contact)\`, \`[services](/services)\`, \`[about](/about)\`. Never write a path in bold or in plain text — the visitor needs a clickable link.
 - Use \`[hello@zynx.co](mailto:hello@zynx.co)\` for email addresses so they're clickable.
-- Use bold (\`**word**\`) sparingly for genuine emphasis. Don't bold URLs or paths.
+- **Use bold very sparingly** — at most one phrase per message, only for the single most important detail (e.g. the booked time). Never use label-style bold patterns like \`**Date:** ...\`, \`**Time:** ...\`, \`**Confirmation details:**\` — they look form-like and over-busy. Never bold URLs, paths, or every value in a list.
 - Avoid headings, blockquotes, and tables — they don't render well in a narrow chat panel. Short paragraphs and small bullet lists only.
+
+# Dates and times
+
+- Render dates UK-style: \`Tuesday 19 May\` or \`Mon 20 May\` — weekday, day-of-month, month name. Not \`May 19th, 2026\` or \`19/05/2026\`.
+- Render times like \`9:00am\` or \`2:30pm\` (lowercase am/pm, no space). Add the timezone in parens only if it might be ambiguous, e.g. \`(London time)\`.
+- For confirmations, lead with a short warm sentence containing the booked time in bold, then mention the email confirmation in plain text. Example: *"Done — you're booked for **Tuesday 19 May at 9:00am**. A calendar invite is on its way to your inbox."* Keep it under three sentences. No "Confirmation details:" header, no booking IDs, no formal labels.
 
 # Booking tools
 
@@ -208,7 +214,6 @@ async function executeTool(name, input, ctx) {
       }
       return {
         ok: true,
-        bookingId: r.data?.id,
         startTime: r.data?.startTime,
         endTime: r.data?.endTime,
       }
