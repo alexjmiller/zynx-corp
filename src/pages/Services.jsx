@@ -8,6 +8,7 @@ const groups = [
     name: 'Design & Build',
     services: [
       {
+        slug: 'ux-design',
         title: 'UX Design & Prototyping',
         icon: '✏️',
         description:
@@ -21,6 +22,7 @@ const groups = [
         ],
       },
       {
+        slug: 'custom-software',
         title: 'Custom Software Development',
         icon: '⚙️',
         description:
@@ -39,6 +41,7 @@ const groups = [
     name: 'Data & AI',
     services: [
       {
+        slug: 'ai-skills',
         title: 'AI Skills',
         icon: '🤖',
         description:
@@ -53,6 +56,7 @@ const groups = [
         ],
       },
       {
+        slug: 'data-analysis',
         title: 'Data Analysis',
         icon: '📊',
         description:
@@ -66,6 +70,7 @@ const groups = [
         ],
       },
       {
+        slug: 'monitoring',
         title: 'Business Monitoring & Dashboards',
         icon: '📈',
         description:
@@ -84,6 +89,7 @@ const groups = [
     name: 'Operations',
     services: [
       {
+        slug: 'automation',
         title: 'Process Automation',
         icon: '🔄',
         description:
@@ -97,6 +103,7 @@ const groups = [
         ],
       },
       {
+        slug: 'integration',
         title: 'Systems Integration',
         icon: '🔗',
         description:
@@ -162,32 +169,34 @@ export default function Services() {
                 </h2>
                 <div className="space-y-12">
                   {group.services.map((service) => (
-                    <Card key={service.title} hover={false} className="p-8 md:p-12">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                        <div>
-                          <div className="text-4xl mb-4">{service.icon}</div>
-                          <h3 className="text-2xl md:text-3xl font-normal text-text mb-4">
-                            {service.title}
-                          </h3>
-                          <p className="text-text-muted leading-relaxed">
-                            {service.description}
-                          </p>
+                    <div key={service.slug} id={service.slug} className="scroll-mt-24">
+                      <Card hover={false} className="p-8 md:p-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                          <div>
+                            <div className="text-4xl mb-4">{service.icon}</div>
+                            <h3 className="text-2xl md:text-3xl font-normal text-text mb-4">
+                              {service.title}
+                            </h3>
+                            <p className="text-text-muted leading-relaxed">
+                              {service.description}
+                            </p>
+                          </div>
+                          <div>
+                            <ul className="space-y-3">
+                              {service.features.map((feature, fIndex) => (
+                                <li
+                                  key={fIndex}
+                                  className="flex items-start gap-3 text-text-muted"
+                                >
+                                  <span className="text-text font-normal">–</span>
+                                  {feature}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
-                        <div>
-                          <ul className="space-y-3">
-                            {service.features.map((feature, fIndex) => (
-                              <li
-                                key={fIndex}
-                                className="flex items-start gap-3 text-text-muted"
-                              >
-                                <span className="text-text font-normal">–</span>
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </Card>
+                      </Card>
+                    </div>
                   ))}
                 </div>
               </div>

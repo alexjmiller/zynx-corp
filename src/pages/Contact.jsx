@@ -34,7 +34,7 @@ export default function Contact() {
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Booking Widget */}
-            <div className="lg:col-span-2">
+            <div id="booking" className="lg:col-span-2 scroll-mt-24">
               <Card hover={false} className="p-0 overflow-hidden">
                 <BookingWidget slug="consultation" />
               </Card>
@@ -42,6 +42,7 @@ export default function Contact() {
 
             {/* Contact Info */}
             <div className="space-y-6">
+              <div id="email" className="scroll-mt-24">
               <Card hover={false} className="p-8">
                 <h3 className="text-xl font-normal text-text mb-4">
                   Email Us
@@ -56,6 +57,7 @@ export default function Contact() {
                   hello@zynx.co
                 </a>
               </Card>
+              </div>
 
               <Card hover={false} className="p-8">
                 <h3 className="text-xl font-normal text-text mb-4">

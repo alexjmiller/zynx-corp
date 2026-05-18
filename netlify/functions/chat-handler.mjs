@@ -39,15 +39,30 @@ const STATIC_SYSTEM_PROMPT = `You are the Zynx assistant — the AI helper on zy
 # Formatting
 
 - Replies are rendered as Markdown in the chat. Use proper Markdown formatting.
-- When pointing to a page on this site, use a Markdown link with the path — e.g. \`[contact page](/contact)\`, \`[services](/services)\`, \`[about](/about)\`. Never write a path in bold or in plain text — the visitor needs a clickable link.
-- Use \`[hello@zynx.co](mailto:hello@zynx.co)\` for email addresses so they're clickable.
+- When pointing to a page or section on this site, use a Markdown link. Prefer the deep-link anchors over the page-level URL — they scroll directly to the relevant section:
+  - Services overview: \`[services](/services)\`
+  - UX Design: \`[UX Design](/services#ux-design)\`
+  - Custom Software Development: \`[Custom Software Development](/services#custom-software)\`
+  - AI Skills: \`[AI Skills](/services#ai-skills)\`
+  - Data Analysis: \`[Data Analysis](/services#data-analysis)\`
+  - Business Monitoring & Dashboards: \`[Business Monitoring & Dashboards](/services#monitoring)\`
+  - Process Automation: \`[Process Automation](/services#automation)\`
+  - Systems Integration: \`[Systems Integration](/services#integration)\`
+  - About Zynx: \`[about](/about)\`
+  - Contact / general: \`[contact page](/contact)\`
+  - Direct to the booking widget on the contact page: \`[the booking page](/contact#booking)\`
+  - Email link: \`[hello@zynx.co](mailto:hello@zynx.co)\`
+- Never write a path in bold or in plain text — the visitor needs a clickable link.
 - **Use bold very sparingly** — at most one phrase per message, only for the single most important detail (e.g. the booked time). Never use label-style bold patterns like \`**Date:** ...\`, \`**Time:** ...\`, \`**Confirmation details:**\` — they look form-like and over-busy. Never bold URLs, paths, or every value in a list.
 - Avoid headings, blockquotes, and tables — they don't render well in a narrow chat panel. Short paragraphs and small bullet lists only.
 
 # Dates and times
 
-- Render dates UK-style: \`Tuesday 19 May\` or \`Mon 20 May\` — weekday, day-of-month, month name. Not \`May 19th, 2026\` or \`19/05/2026\`.
-- Render times like \`9:00am\` or \`2:30pm\` (lowercase am/pm, no space). Add the timezone in parens only if it might be ambiguous, e.g. \`(London time)\`.
+- The booking tools return pre-formatted labels. Use them verbatim:
+  - \`list_available_days\` → each day has a \`label\` like \`"Tuesday 19 May"\`. Quote it as-is.
+  - \`list_slots\` → each slot has a \`localTime\` like \`"9:00am"\` already in the visitor's timezone.
+- Never compute weekdays yourself, and never convert UTC to local time yourself. The tool already did it.
+- Pass the raw UTC \`start\` from \`list_slots\` verbatim to \`create_booking\`. Never reformat it.
 - For confirmations, lead with a short warm sentence containing the booked time in bold, then mention the email confirmation in plain text. Example: *"Done — you're booked for **Tuesday 19 May at 9:00am**. A calendar invite is on its way to your inbox."* Keep it under three sentences. No "Confirmation details:" header, no booking IDs, no formal labels.
 
 # Booking tools
@@ -145,11 +160,60 @@ const TOOLS = [
   },
 ]
 
+const WEEKDAYS = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+]
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+]
+
+function weekdayFor(dateStr) {
+  // dateStr is "YYYY-MM-DD". new Date(dateStr) parses it as UTC midnight,
+  // and getUTCDay() returns the correct weekday for that calendar date.
+  return WEEKDAYS[new Date(dateStr).getUTCDay()]
+}
+
+function dayLabel(dateStr) {
+  const [, m, d] = dateStr.split('-').map(Number)
+  return `${weekdayFor(dateStr)} ${d} ${MONTHS[m - 1]}`
+}
+
+function localTimeLabel(utcStart, timezone) {
+  try {
+    const formatted = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: timezone,
+    }).format(new Date(utcStart))
+    return formatted.replace(/\s+/g, '').toLowerCase()
+  } catch {
+    return utcStart
+  }
+}
+
 function dynamicContext({ timezone, currentDate }) {
   return `RUNTIME CONTEXT
-- Today's date: ${currentDate} (use this when the visitor says "this week", "next month", etc.)
-- Visitor's local timezone: ${timezone}
-- Availability and booking calls automatically use this timezone — slot times come back in UTC, but render them to the visitor in their local time.`
+- Today is **${weekdayFor(currentDate)} ${dayLabel(currentDate).split(' ').slice(1).join(' ')} ${currentDate.slice(0, 4)}** (ISO: ${currentDate}). Use this to interpret "this week", "next week", "today", "tomorrow", etc.
+- Visitor's local timezone: ${timezone}.
+- The booking tools return pre-formatted human labels (\`label\` for days, \`localTime\` for slots). Use those labels verbatim — do not compute weekdays or convert times yourself.`
 }
 
 async function callBooq(path, init, booqKey) {
@@ -184,7 +248,13 @@ async function executeTool(name, input, ctx) {
       })
       const r = await callBooq(`/api/v1/availability?${params}`, { method: 'GET' }, booqKey)
       if (!r.ok) return { error: 'unavailable', status: r.status, message: r.data?.error || 'Could not fetch days.' }
-      return { days: r.data?.days ?? [], month: input.month, timezone }
+      const rawDays = Array.isArray(r.data?.days) ? r.data.days : []
+      const days = rawDays.map((d) => ({
+        date: d,
+        weekday: weekdayFor(d),
+        label: dayLabel(d),
+      }))
+      return { days, month: input.month, timezone }
     }
     if (name === 'list_slots') {
       const params = new URLSearchParams({
@@ -194,7 +264,13 @@ async function executeTool(name, input, ctx) {
       })
       const r = await callBooq(`/api/v1/availability?${params}`, { method: 'GET' }, booqKey)
       if (!r.ok) return { error: 'unavailable', status: r.status, message: r.data?.error || 'Could not fetch slots.' }
-      return { slots: r.data?.slots ?? [], date: input.date, timezone }
+      const rawSlots = Array.isArray(r.data?.slots) ? r.data.slots : []
+      const slots = rawSlots.map((s) => ({
+        start: s.start,
+        end: s.end,
+        localTime: localTimeLabel(s.start, timezone),
+      }))
+      return { slots, date: input.date, dayLabel: dayLabel(input.date), timezone }
     }
     if (name === 'create_booking') {
       const body = {
