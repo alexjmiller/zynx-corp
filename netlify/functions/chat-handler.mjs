@@ -13,6 +13,21 @@ const MODEL = 'claude-haiku-4-5'
 const MAX_TOKENS = 1024
 const MAX_TOOL_ITERATIONS = 6
 
+// Cap how long a single chat can run. 30 user turns is generous — most useful
+// conversations resolve in 5–15. From WIND_DOWN_AT onward the bot is told to
+// steer toward booking or handoff; at MAX_USER_TURNS we stop calling Claude
+// and return a canned wrap-up. Visitors can click "New chat" in the widget
+// to start over.
+const MAX_USER_TURNS = 30
+const WIND_DOWN_AT = 25
+
+const WRAP_UP_MESSAGE = `We've covered quite a lot in this chat — to keep things moving, let's wrap up here. The fastest next steps:
+
+- **Book a free 30-minute consultation** at [the booking page](/contact#booking)
+- Or email [hello@zynx.co](mailto:hello@zynx.co) directly
+
+Thanks for chatting — and click "New chat" above if you want to start a fresh conversation.`
+
 const BOOQ_BASE = 'https://booq.now'
 const BOOQ_SLUG = 'consultation'
 
@@ -270,11 +285,16 @@ function truncate(s, max = 500) {
   return str.length > max ? `${str.slice(0, max)}…` : str
 }
 
-function dynamicContext({ timezone, currentDate }) {
+function dynamicContext({ timezone, currentDate, userTurnCount }) {
+  let lengthHint = ''
+  if (userTurnCount >= WIND_DOWN_AT) {
+    const remaining = Math.max(0, MAX_USER_TURNS - userTurnCount)
+    lengthHint = `\n- **This conversation is getting long (${userTurnCount} user turns, ${remaining} remaining before it's cut off).** If the visitor hasn't booked or done a handoff yet, gently steer toward one or the other. Don't keep going in circles. Don't mention turn counts to the visitor.`
+  }
   return `RUNTIME CONTEXT
 - Today is **${weekdayFor(currentDate)} ${dayLabel(currentDate).split(' ').slice(1).join(' ')} ${currentDate.slice(0, 4)}** (ISO: ${currentDate}). Use this to interpret "this week", "next week", "today", "tomorrow", etc.
 - Visitor's local timezone: ${timezone}.
-- The booking tools return pre-formatted human labels (\`label\` for days, \`localTime\` for slots). Use those labels verbatim — do not compute weekdays or convert times yourself.`
+- The booking tools return pre-formatted human labels (\`label\` for days, \`localTime\` for slots). Use those labels verbatim — do not compute weekdays or convert times yourself.${lengthHint}`
 }
 
 async function callBooq(path, init, booqKey) {
@@ -518,6 +538,11 @@ export async function handleChat(body) {
     }
   }
 
+  const userTurnCount = cleaned.filter((m) => m.role === 'user').length
+  if (userTurnCount > MAX_USER_TURNS) {
+    return { message: { role: 'assistant', content: WRAP_UP_MESSAGE } }
+  }
+
   const timezone =
     typeof body?.timezone === 'string' && body.timezone.trim()
       ? body.timezone.trim()
@@ -543,7 +568,7 @@ export async function handleChat(body) {
           },
           {
             type: 'text',
-            text: dynamicContext({ timezone, currentDate }),
+            text: dynamicContext({ timezone, currentDate, userTurnCount }),
           },
         ],
         tools: TOOLS,
