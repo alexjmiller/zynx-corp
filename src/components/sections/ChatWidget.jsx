@@ -52,7 +52,7 @@ const MARKDOWN_OPTIONS = {
 const WELCOME_MESSAGE = {
   role: 'assistant',
   content:
-    "Hi — I'm the Zynx assistant. I can answer questions about our services, help you figure out where AI or automation might fit your business, and book a free consultation. What brings you here?",
+    "Hi — I'm the Zynx assistant. I can answer questions about our services, help you figure out where AI or automation might fit your business, or book a meeting. What brings you here today?",
 }
 
 function loadState() {
