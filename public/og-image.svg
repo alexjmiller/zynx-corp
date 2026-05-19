@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zynx — Software, AI, Data and Automation for growing businesses">
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zynx — Software, AI, Data and Automation">
   <!-- Dark background matching site theme -->
   <rect width="1200" height="630" fill="#282828"/>
 
@@ -12,31 +12,29 @@
   </defs>
   <rect width="1200" height="630" fill="url(#vignette)"/>
 
-  <!-- Octahedron mark, scaled-up favicon, top-left -->
+  <!-- Octahedron mark — same construction as the favicon, scaled 1.25x to
+       fill an 80×80 box at top-left. Four faces (top, right, left, bottom)
+       form the complete diamond shape. -->
   <g transform="translate(80, 80)">
     <circle cx="40" cy="40" r="40" fill="#6417a3"/>
-    <polygon points="40,10 74.5,69.9 5.5,69.9" fill="#ffffff"/>
-    <polygon points="40,10 74.5,30.1 74.5,69.9" fill="#d8d8d8"/>
-    <polygon points="40,10 5.5,69.9 5.5,30.1" fill="#e4e4e4"/>
+    <polygon points="40,0 74.5,59.9 5.5,59.9" fill="#ffffff"/>
+    <polygon points="40,0 74.5,20.1 74.5,59.9" fill="#d8d8d8"/>
+    <polygon points="40,0 5.5,59.9 5.5,20.1" fill="#e4e4e4"/>
+    <polygon points="40,80 5.5,59.9 74.5,59.9" fill="#c0c0c0"/>
   </g>
 
   <!-- Centred wordmark + tagline -->
   <g text-anchor="middle" font-family="Montserrat, 'Helvetica Neue', Helvetica, Arial, sans-serif">
     <!-- "zynx" wordmark — bold, very large -->
-    <text x="600" y="310" fill="#d5d5d5" font-weight="700" font-size="220" letter-spacing="-4">zynx</text>
-
-    <!-- Purple accent line under wordmark -->
-    <line x1="540" y1="360" x2="660" y2="360" stroke="#6417a3" stroke-width="4"/>
+    <text x="600" y="320" fill="#d5d5d5" font-weight="700" font-size="220" letter-spacing="-4">zynx</text>
 
     <!-- Tagline -->
-    <text x="600" y="430" fill="#a5a5a5" font-weight="400" font-size="40" letter-spacing="2">
+    <text x="600" y="420" fill="#a5a5a5" font-weight="400" font-size="40" letter-spacing="2">
       Software  ·  AI  ·  Data  ·  Automation
     </text>
 
-    <!-- Sub-tagline -->
-    <text x="600" y="485" fill="#838383" font-weight="300" font-size="26">
-      for small and medium businesses
-    </text>
+    <!-- Purple accent line under the tagline -->
+    <line x1="490" y1="465" x2="710" y2="465" stroke="#6417a3" stroke-width="4"/>
   </g>
 
   <!-- URL bottom-right -->
