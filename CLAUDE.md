@@ -39,7 +39,7 @@ Set in Netlify (production) and optionally in `.env` (local — gitignored). `.e
 | Var | Purpose | Required |
 |---|---|---|
 | `CLAUDE_API_KEY` | Anthropic API key for the chatbot (Haiku 4.5). Note: the SDK defaults to `ANTHROPIC_API_KEY`; handler passes it explicitly. | Required for the bot |
-| `BOOQ_API_KEY` | booq.now bearer token (`bkr_...`) for chatbot booking tools. **Note**: a separate copy of this key currently lives in `src/components/sections/BookingWidget.jsx` (client-side) — domain-pinned in booq.now so contained, but planned to move server-side. | Required for chatbot booking |
+| `BOOQ_API_KEY` | booq.now bearer token (`bkr_...`). Used by the chatbot booking tools AND the on-page BookingWidget — both go through Netlify Functions (`/api/chat` and `/api/booking`). Key never reaches the client. | Required for any booking |
 | `SLACK_WEBHOOK` | Slack incoming webhook URL for lead-handoff notifications. | Required for the human-handoff flow |
 | `RESEND_API_KEY` | Resend API key for visitor auto-confirmation emails on lead capture. | Optional |
 | `EMAIL_FROM` | Sender address for Resend auto-confirmation (e.g. `noreply@send.zynx.uk`). If unset, the chatbot still captures leads to Slack but skips the visitor email. | Optional |
@@ -140,7 +140,7 @@ The chat widget calls `/api/chat`. Netlify routes it to `chat.mjs` via `export c
 
 ## What's deferred / important context
 
-- **Booq.now API key is in the client bundle** (`BookingWidget.jsx`). Domain-pinned so contained, but planned to move server-side via a Netlify Function — same pattern as the chatbot. See `~/.claude/projects/.../memory/project_backlog.md`.
+- **Booq.now calls all go through Netlify Functions** (chatbot via `/api/chat`, on-page widget via `/api/booking`). The key only lives in Netlify env vars — never shipped to the browser.
 - **Privacy + Terms pages drafted but not legally reviewed.** UK GDPR-aware defaults; should be eyeballed by a solicitor before being treated as final.
 - **No rate limiting** on `/api/chat` beyond the 30-turn cap. Per-IP throttle is a planned backlog item.
 - **No durable lead store** — chatbot leads only land in Slack right now. A CRM project is in the backlog.

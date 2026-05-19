@@ -1,7 +1,8 @@
 import { useState, useEffect, useId } from 'react'
 
-const API_BASE = 'https://booq.now'
-const API_KEY = 'bkr_3cb7642e6240fb9d514cd065ed83dae4cae32d205245238949b140536573552e'
+// All booq.now calls go through our own /api/booking endpoint. The
+// bearer token stays server-side; the client never sees it.
+const API_ENDPOINT = '/api/booking'
 
 const WEEKDAY_LABELS = [
   { short: 'Su', full: 'Sunday' },
@@ -13,7 +14,7 @@ const WEEKDAY_LABELS = [
   { short: 'Sa', full: 'Saturday' },
 ]
 
-export default function BookingWidget({ slug }) {
+export default function BookingWidget() {
   const [step, setStep] = useState('date')
   const [timezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
   const [availableDays, setAvailableDays] = useState([])
@@ -32,43 +33,36 @@ export default function BookingWidget({ slug }) {
   const emailId = useId()
   const notesId = useId()
 
-  const headers = {
-    Authorization: `Bearer ${API_KEY}`,
-    'Content-Type': 'application/json',
-  }
-
   useEffect(() => {
     const now = new Date()
     const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
     setLoading(true)
-    fetch(
-      `${API_BASE}/api/v1/availability?slug=${slug}&timezone=${timezone}&month=${month}`,
-      { headers }
-    )
+    const params = new URLSearchParams({ month, timezone })
+    fetch(`${API_ENDPOINT}?${params}`)
       .then((r) => r.json())
       .then((data) => {
+        if (data.error) throw new Error(data.error)
         const today = new Date().toISOString().split('T')[0]
         setAvailableDays((data.days || []).filter((d) => d >= today))
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
-  }, [slug, timezone])
+  }, [timezone])
 
   useEffect(() => {
     if (!selectedDate) return
     setLoading(true)
-    fetch(
-      `${API_BASE}/api/v1/availability?slug=${slug}&timezone=${timezone}&date=${selectedDate}`,
-      { headers }
-    )
+    const params = new URLSearchParams({ date: selectedDate, timezone })
+    fetch(`${API_ENDPOINT}?${params}`)
       .then((r) => r.json())
       .then((data) => {
+        if (data.error) throw new Error(data.error)
         setSlots(data.slots || [])
         setStep('time')
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false))
-  }, [selectedDate, slug, timezone])
+  }, [selectedDate, timezone])
 
   function handleSelectSlot(slot) {
     setSelectedSlot(slot)
@@ -80,11 +74,10 @@ export default function BookingWidget({ slug }) {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${API_BASE}/api/v1/bookings`, {
+      const res = await fetch(API_ENDPOINT, {
         method: 'POST',
-        headers,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          slug,
           startTime: selectedSlot.start,
           visitorName: name,
           visitorEmail: email,
