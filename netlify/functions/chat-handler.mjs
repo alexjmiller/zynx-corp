@@ -277,6 +277,31 @@ function localTimeLabel(utcStart, timezone) {
   }
 }
 
+// After this hour (local to the visitor) we treat 'today' as no longer
+// bookable — booq.now will still return today in available_days because
+// there's technically time left in the calendar day, but realistically
+// a consultation can't be set up.
+const SAME_DAY_CUTOFF_HOUR = 17
+
+// Compute the visitor's local YYYY-MM-DD date string and 0-23 hour.
+function visitorNowParts(timezone) {
+  try {
+    const now = new Date()
+    const date = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(now)
+    const hour = parseInt(
+      new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        hour12: false,
+        timeZone: timezone,
+      }).format(now),
+      10,
+    )
+    return { date, hour }
+  } catch {
+    return { date: new Date().toISOString().slice(0, 10), hour: 12 }
+  }
+}
+
 function escapeHtml(s) {
   return String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -296,9 +321,21 @@ function dynamicContext({ timezone, currentDate, userTurnCount }) {
     const remaining = Math.max(0, MAX_USER_TURNS - userTurnCount)
     lengthHint = `\n- **This conversation is getting long (${userTurnCount} user turns, ${remaining} remaining before it's cut off).** If the visitor hasn't booked or done a handoff yet, gently steer toward one or the other. Don't keep going in circles. Don't mention turn counts to the visitor.`
   }
+  let localTime = ''
+  try {
+    localTime = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: timezone,
+    }).format(new Date())
+  } catch {
+    localTime = ''
+  }
   return `RUNTIME CONTEXT
 - Today is **${weekdayFor(currentDate)} ${dayLabel(currentDate).split(' ').slice(1).join(' ')} ${currentDate.slice(0, 4)}** (ISO: ${currentDate}). Use this to interpret "this week", "next week", "today", "tomorrow", etc.
-- Visitor's local timezone: ${timezone}.
+- Visitor's local timezone: ${timezone}${localTime ? ` (currently ${localTime} local time)` : ''}.
+- After 5pm visitor-local, list_available_days will NOT include today even if booq.now technically still has slots — too late to set up a consultation. If the visitor specifically asks about today and it's late, gently suggest tomorrow.
 - The booking tools return pre-formatted human labels (\`label\` for days, \`localTime\` for slots). Use those labels verbatim — do not compute weekdays or convert times yourself.${lengthHint}`
 }
 
@@ -334,7 +371,11 @@ async function executeTool(name, input, ctx) {
       })
       const r = await callBooq(`/api/v1/availability?${params}`, { method: 'GET' }, booqKey)
       if (!r.ok) return { error: 'unavailable', status: r.status, message: r.data?.error || 'Could not fetch days.' }
-      const rawDays = Array.isArray(r.data?.days) ? r.data.days : []
+      let rawDays = Array.isArray(r.data?.days) ? r.data.days : []
+      const { date: todayStr, hour: nowHour } = visitorNowParts(timezone)
+      if (nowHour >= SAME_DAY_CUTOFF_HOUR) {
+        rawDays = rawDays.filter((d) => d !== todayStr)
+      }
       const days = rawDays.map((d) => ({
         date: d,
         weekday: weekdayFor(d),

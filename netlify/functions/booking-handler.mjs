@@ -8,6 +8,30 @@
 const BOOQ_BASE = 'https://booq.now'
 const BOOQ_SLUG = 'consultation'
 
+// After this hour (local to the visitor) we drop 'today' from the
+// available-days result. booq.now technically still returns today
+// because there's calendar time left, but a consultation can't be
+// realistically arranged at 23:00.
+const SAME_DAY_CUTOFF_HOUR = 17
+
+function visitorNowParts(timezone) {
+  try {
+    const now = new Date()
+    const date = new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(now)
+    const hour = parseInt(
+      new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        hour12: false,
+        timeZone: timezone,
+      }).format(now),
+      10,
+    )
+    return { date, hour }
+  } catch {
+    return { date: new Date().toISOString().slice(0, 10), hour: 12 }
+  }
+}
+
 async function callBooq(path, init = {}) {
   const apiKey = process.env.BOOQ_API_KEY
   if (!apiKey) {
@@ -52,7 +76,19 @@ export async function getAvailability({ month, date, timezone } = {}) {
       data: { error: 'month or date required' },
     }
   }
-  return callBooq(`/api/v1/availability?${search.toString()}`, { method: 'GET' })
+  const r = await callBooq(`/api/v1/availability?${search.toString()}`, { method: 'GET' })
+  // For month queries, drop today from the days list if it's past the
+  // same-day cutoff — too late for the visitor to book today.
+  if (r.ok && month && Array.isArray(r.data?.days)) {
+    const { date: todayStr, hour } = visitorNowParts(tz)
+    if (hour >= SAME_DAY_CUTOFF_HOUR && r.data.days.includes(todayStr)) {
+      r.data = {
+        ...r.data,
+        days: r.data.days.filter((d) => d !== todayStr),
+      }
+    }
+  }
+  return r
 }
 
 export async function createBooking(body = {}) {
