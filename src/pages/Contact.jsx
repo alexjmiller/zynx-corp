@@ -12,11 +12,11 @@ export default function Contact() {
         <meta property="og:title" content="Contact Us - Book a Free Consultation | Zynx" />
         <meta property="og:description" content="Book a free consultation to discuss your software, AI, data or automation project." />
         <meta property="og:url" content="https://zynx.uk/contact" />
-        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta property="og:image" content="https://zynx.uk/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Contact Us - Book a Free Consultation | Zynx" />
         <meta name="twitter:description" content="Book a free consultation to discuss your software, AI, data or automation project." />
-        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.png" />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">

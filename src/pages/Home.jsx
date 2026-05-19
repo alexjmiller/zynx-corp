@@ -13,11 +13,11 @@ export default function Home() {
         <meta property="og:title" content="Zynx - Software, AI, Data & Automation for Growing Businesses" />
         <meta property="og:description" content="Custom software, practical AI, data analysis, dashboards and automation for small and medium businesses." />
         <meta property="og:url" content="https://zynx.uk/" />
-        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta property="og:image" content="https://zynx.uk/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Zynx - Software, AI, Data & Automation for Growing Businesses" />
         <meta name="twitter:description" content="Custom software, practical AI, data analysis, dashboards and automation for small and medium businesses." />
-        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.png" />
       </Helmet>
       <Hero />
       <ServiceCards />

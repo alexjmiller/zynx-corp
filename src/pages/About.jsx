@@ -27,11 +27,11 @@ export default function About() {
         <meta property="og:title" content="About Zynx - Software, AI & Data Partners for SMBs" />
         <meta property="og:description" content="Software, AI, data and automation partners for small and medium businesses." />
         <meta property="og:url" content="https://zynx.uk/about" />
-        <meta property="og:image" content="https://zynx.uk/og-image.svg" />
+        <meta property="og:image" content="https://zynx.uk/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About Zynx - Software, AI & Data Partners for SMBs" />
         <meta name="twitter:description" content="Software, AI, data and automation partners for small and medium businesses." />
-        <meta name="twitter:image" content="https://zynx.uk/og-image.svg" />
+        <meta name="twitter:image" content="https://zynx.uk/og-image.png" />
       </Helmet>
       {/* Hero */}
       <section className="pt-24 pb-10">
