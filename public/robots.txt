@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zynx.co/sitemap.xml
+Sitemap: https://zynx.uk/sitemap.xml

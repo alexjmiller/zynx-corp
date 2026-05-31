@@ -16,6 +16,7 @@ export default function Terms() {
           content="The terms that apply when you use the zynx.uk website and chatbot."
         />
         <meta property="og:url" content="https://zynx.uk/terms" />
+        <link rel="canonical" href="https://zynx.uk/terms" />
         <meta property="og:image" content="https://zynx.uk/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Terms of Use | Zynx" />

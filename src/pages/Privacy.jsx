@@ -16,6 +16,7 @@ export default function Privacy() {
           content="How Zynx collects, uses and protects your information."
         />
         <meta property="og:url" content="https://zynx.uk/privacy" />
+        <link rel="canonical" href="https://zynx.uk/privacy" />
         <meta property="og:image" content="https://zynx.uk/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Privacy Policy | Zynx" />

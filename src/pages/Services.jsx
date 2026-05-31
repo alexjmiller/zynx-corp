@@ -138,6 +138,7 @@ export default function Services() {
           content="UX, custom software, AI, data analysis, dashboards and automation for SMBs."
         />
         <meta property="og:url" content="https://zynx.uk/services" />
+        <link rel="canonical" href="https://zynx.uk/services" />
         <meta property="og:image" content="https://zynx.uk/og-image.png" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Our Services - Software, AI, Data & Automation | Zynx" />

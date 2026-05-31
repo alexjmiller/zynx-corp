@@ -23,7 +23,8 @@ export default function About() {
     <>
       <Helmet>
         <title>About Zynx - Software, AI & Data Partners for SMBs</title>
-        <meta name="description" content="Learn about Zynx — we help small and medium businesses build custom software, apply AI where it actually moves the needle, and unlock the value in their data." />
+        <meta name="description" content="Zynx brings enterprise-level digital expertise to small and medium-sized businesses — combining user-centred design, software development, data and practical AI." />
+        <link rel="canonical" href="https://zynx.uk/about" />
         <meta property="og:title" content="About Zynx - Software, AI & Data Partners for SMBs" />
         <meta property="og:description" content="Software, AI, data and automation partners for small and medium businesses." />
         <meta property="og:url" content="https://zynx.uk/about" />

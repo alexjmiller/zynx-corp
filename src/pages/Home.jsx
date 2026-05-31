@@ -11,7 +11,8 @@ export default function Home() {
     <>
       <Helmet>
         <title>Zynx - Software, AI, Data & Automation for Growing Businesses</title>
-        <meta name="description" content="Zynx helps SMBs build custom software, put AI to work where it actually moves the needle, unlock the patterns in their data, and automate the everyday. Book a free consultation." />
+        <meta name="description" content="Zynx builds custom software, apps and websites for growing businesses. Unlock the value in your data and put AI and automation to work. Book a free consultation." />
+        <link rel="canonical" href="https://zynx.uk/" />
         <meta property="og:title" content="Zynx - Software, AI, Data & Automation for Growing Businesses" />
         <meta property="og:description" content="Custom software, practical AI, data analysis, dashboards and automation for small and medium businesses." />
         <meta property="og:url" content="https://zynx.uk/" />
