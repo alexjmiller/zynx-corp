@@ -13,7 +13,7 @@ const groups = [
         title: 'UX Design & Prototyping',
         icon: '✏️',
         description:
-          "Rapid prototyping means you test and learn before you commit. Put an idea in front of real users in days, iterate cheaply, and only build the full thing when you know it lands. Skipping this step — building first, learning later — is where small teams waste the most money on the wrong product.",
+          'Rapid prototyping allows you to test ideas with real users before investing heavily in development. We help you validate assumptions, reduce risk and build confidence before committing to a full product build.',
         features: [
           'User research and discovery',
           'Rapid prototyping',
@@ -27,12 +27,12 @@ const groups = [
         title: 'Software Development',
         icon: '⚙️',
         description:
-          'Tailored software designed around your business and grounded in user-centred design principles — from internal tools to customer-facing platforms.',
+          'Custom software designed around your business processes and user needs. From internal tools to customer-facing platforms, we build systems that help your organisation operate more effectively.',
         features: [
           'Web applications and portals',
-          'Mobile-responsive designs',
-          'Internal business tools',
-          'Customer-facing platforms',
+          'Mobile-responsive applications',
+          'Internal business systems',
+          'Customer platforms',
           'API development and integration',
         ],
       },
@@ -47,14 +47,14 @@ const groups = [
         title: 'Harness AI',
         icon: '🤖',
         description:
-          "Most AI projects don't move the needle — they're built before anyone asks where AI actually fits. We start by finding the places in your business where AI changes the outcome, then implement it safely with the right guardrails and a clear way to measure the win.",
+          'Most AI projects fail because organisations start with the technology instead of the problem. We begin by identifying where AI can create genuine business value, then implement solutions safely, responsibly and with clear measures of success.',
         features: [
-          'AI opportunity audits — where it pays off, where it doesn\'t',
-          'AI assistants for staff and customers',
+          'AI opportunity assessments',
+          'Staff and customer AI assistants',
           'Document understanding and extraction',
-          'Smart search across your business data',
+          'Intelligent search across business data',
           'Drafting, triage and summarisation',
-          'Safe rollout: guardrails, evaluation, human-in-the-loop',
+          'Governance, evaluation and human oversight',
         ],
       },
       {
@@ -62,13 +62,13 @@ const groups = [
         title: 'Data Analysis',
         icon: '📊',
         description:
-          'Turn the data you already have — CRM, sales, support, operations — into clear answers. We surface the patterns and risks hidden in your numbers.',
+          'Turn your existing data into practical business insights. We help uncover patterns, risks and opportunities hidden within your operational, sales and customer data.',
         features: [
-          'Customer segmentation and lifetime value',
-          'Churn, risk and retention signals',
+          'Customer segmentation and lifetime value analysis',
+          'Retention and churn insights',
           'Sales and demand forecasting',
           'Cohort and funnel analysis',
-          'One-off deep-dive investigations',
+          'Deep-dive business investigations',
         ],
       },
       {
@@ -76,13 +76,13 @@ const groups = [
         title: 'Business Monitoring & Dashboards',
         icon: '📈',
         description:
-          'Always-on visibility into how your business is performing. Live dashboards for the metrics that matter, with alerts when something needs attention.',
+          'Gain real-time visibility into the metrics that matter most. Build confidence in your decisions with dashboards, alerts and reporting tailored to your business.',
         features: [
-          'Live KPI and revenue dashboards',
-          'Operational and team performance views',
-          'Custom reports for stakeholders',
-          'Threshold-based alerts and notifications',
-          'Unified view across multiple systems',
+          'KPI and revenue dashboards',
+          'Operational performance monitoring',
+          'Stakeholder reporting',
+          'Automated alerts and notifications',
+          'Unified reporting across multiple systems',
         ],
       },
     ],
@@ -96,13 +96,13 @@ const groups = [
         title: 'Process Automation',
         icon: '🔄',
         description:
-          'Streamline operations and use your data to drive smarter customer experiences. Automate the repetitive work and trigger the right message at the right moment.',
+          'Reduce repetitive work and improve consistency by automating routine business processes and customer communications.',
         features: [
-          'Workflow and back-office automation',
-          'Data-driven customer notifications',
-          'Lifecycle and onboarding emails',
-          'Escalation and follow-up rules',
-          'Scheduled tasks and report generation',
+          'Workflow automation',
+          'Customer notifications',
+          'Onboarding and lifecycle communications',
+          'Escalation and follow-up workflows',
+          'Scheduled reporting and tasks',
         ],
       },
       {
@@ -110,12 +110,12 @@ const groups = [
         title: 'Systems Integration',
         icon: '🔗',
         description:
-          'Connect your existing tools into one unified ecosystem so data flows where it needs to and your team stops re-keying information.',
+          'Connect the tools you already use so information flows automatically between systems, eliminating duplication and reducing errors.',
         features: [
           'CRM integration',
-          'Accounting software connections',
-          'E-commerce platform linking',
-          'Third-party API integration',
+          'Accounting software integration',
+          'E-commerce integrations',
+          'Third-party API development',
           'Data synchronisation',
         ],
       },
@@ -155,10 +155,40 @@ export default function Services() {
               Our Services
             </h1>
             <p className="mt-6 text-lg text-text-muted leading-relaxed">
-              We help small and medium businesses get more from their software, their data
-              and their day-to-day operations. From user-centred design through to AI,
-              dashboards and automation — everything we build is grounded in what your
-              business actually needs.
+              We help small and medium businesses get more from their software, data and
+              day-to-day operations. Whether you're looking to streamline processes,
+              improve visibility, automate repetitive work or explore AI opportunities, we
+              focus on solutions that deliver measurable business outcomes.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Common Challenges */}
+      <section className="py-10">
+        <Container>
+          <div className="max-w-3xl">
+            <h2 className="text-2xl md:text-3xl font-normal text-text mb-6">
+              Common challenges we help solve
+            </h2>
+            <ul className="space-y-3 mb-6">
+              {[
+                'Too much manual work and repetitive administration',
+                'Disconnected systems and duplicated data',
+                'Reporting that takes hours instead of minutes',
+                "Valuable business data that's difficult to access or understand",
+                "Software that doesn't fit the way your team works",
+                'Uncertainty about where AI can create real value',
+              ].map((challenge, index) => (
+                <li key={index} className="flex items-start gap-3 text-text-muted">
+                  <span className="text-text font-normal">–</span>
+                  {challenge}
+                </li>
+              ))}
+            </ul>
+            <p className="text-text-muted leading-relaxed">
+              Whether you need a custom platform, better visibility into your operations,
+              or smarter automation, we'll help identify the highest-impact opportunities.
             </p>
           </div>
         </Container>
@@ -219,7 +249,8 @@ export default function Services() {
               Not sure what you need?
             </h2>
             <p className="mt-4 text-text-muted max-w-2xl mx-auto">
-              Book a free consultation and we'll help you identify the best solution for your business.
+              Book a free consultation and we'll help identify the most valuable
+              opportunities for your business.
             </p>
             <div className="mt-8">
               <Button to="/contact">

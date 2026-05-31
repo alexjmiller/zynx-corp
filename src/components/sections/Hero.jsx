@@ -9,13 +9,16 @@ export default function Hero() {
       <Container className="relative z-10">
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-normal text-text leading-tight">
-            Modern software solutions for growing businesses
+            Software that helps your business run smarter
           </h1>
           <p className="mt-6 text-lg text-text-muted leading-relaxed">
-            We build custom software, apps, and websites that help small and
-            medium-sized businesses grow. We unlock the value in your data and put AI
-            and automation to work—making everyday operations smoother and giving you
-            a clearer view of what's driving your business.
+            We build custom software, apps and websites for growing businesses. From
+            replacing spreadsheets and manual processes to unlocking the value in your
+            data with AI and automation, we create systems that save time, improve
+            visibility and help you scale with confidence.
+          </p>
+          <p className="mt-6 text-lg text-text font-normal">
+            Custom Software. Data. AI. Automation. Built around your business.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Button to="/contact">

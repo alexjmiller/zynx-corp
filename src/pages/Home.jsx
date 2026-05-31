@@ -1,6 +1,8 @@
 import { Helmet } from 'react-helmet-async'
 import Hero from '../components/sections/Hero'
+import WhyChooseZynx from '../components/sections/WhyChooseZynx'
 import ServiceCards from '../components/sections/ServiceCards'
+import HowWeWork from '../components/sections/HowWeWork'
 import Container from '../components/ui/Container'
 import Button from '../components/ui/Button'
 
@@ -20,17 +22,19 @@ export default function Home() {
         <meta name="twitter:image" content="https://zynx.uk/og-image.png" />
       </Helmet>
       <Hero />
+      <WhyChooseZynx />
       <ServiceCards />
+      <HowWeWork />
 
       {/* CTA Section */}
       <section className="py-24">
         <Container>
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-normal text-text">
-              Ready to transform your business?
+            <h2 className="text-3xl md:text-4xl font-normal text-text max-w-3xl mx-auto">
+              Ready to spend less time managing systems and more time growing your business?
             </h2>
             <p className="mt-4 text-text-muted max-w-2xl mx-auto">
-              Let's discuss how we can help you achieve your goals with custom software solutions.
+              Let's explore where software, automation or AI could make the biggest impact.
             </p>
             <div className="mt-8">
               <Button to="/contact">

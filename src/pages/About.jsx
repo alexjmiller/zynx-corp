@@ -6,15 +6,15 @@ import Button from '../components/ui/Button'
 const values = [
   {
     title: 'Simplicity',
-    description: 'We believe the best solutions are elegant and easy to use. We cut through complexity to deliver software that just works.',
+    description: 'The best solutions are easy to understand and easy to use. We reduce complexity so technology works for people, not against them.',
   },
   {
     title: 'Partnership',
-    description: 'We work alongside our clients as true partners, understanding their business deeply to deliver meaningful results.',
+    description: 'We work closely with our clients, building long-term relationships and delivering solutions aligned with their goals.',
   },
   {
     title: 'Quality',
-    description: 'We take pride in our craft. Every line of code is written with care, tested thoroughly, and built to last.',
+    description: 'We take pride in our work. Every solution is designed thoughtfully, built carefully and tested thoroughly.',
   },
 ]
 
@@ -40,10 +40,13 @@ export default function About() {
             <h1 className="text-4xl md:text-5xl font-normal text-text leading-tight">
               About Zynx
             </h1>
-            <p className="mt-6 text-lg text-text-muted leading-relaxed">
-              We're a team of designers, developers and data specialists helping small
-              and medium businesses build custom software, put AI to work where it earns
-              its keep, and turn their data into clearer decisions.
+            <p className="mt-6 text-lg text-text leading-relaxed">
+              We help growing businesses use technology more effectively.
+            </p>
+            <p className="mt-4 text-lg text-text-muted leading-relaxed">
+              By combining user-centred design, software development, data expertise and
+              practical AI, we create solutions that streamline operations, improve
+              visibility and support sustainable growth.
             </p>
           </div>
         </Container>
@@ -59,37 +62,43 @@ export default function About() {
               </h2>
               <div className="space-y-4 text-text-muted leading-relaxed">
                 <p>
-                  Zynx was founded with a simple observation: small and medium businesses
-                  often struggle to find affordable, high-quality software development
-                  services tailored to their unique needs.
+                  Zynx was founded to bring enterprise-level digital expertise to small
+                  and medium-sized businesses.
                 </p>
                 <p>
-                  Too often, SMBs are left with the choice between expensive enterprise
-                  solutions that don't fit their scale, or off-the-shelf products that
-                  don't quite solve their problems.
+                  After decades of experience delivering digital products, customer
+                  experiences and operational improvements across multiple industries, we
+                  saw the same challenge repeatedly: smaller businesses often face the same
+                  problems as larger organisations but rarely have access to the same level
+                  of expertise.
                 </p>
                 <p>
-                  We bridge that gap. Our team brings enterprise-level expertise to SMB
-                  projects, delivering custom solutions that are practical, affordable,
-                  and built to grow with your business.
+                  Too often they're forced to choose between expensive enterprise software
+                  or off-the-shelf products that only partially solve the problem.
+                </p>
+                <p>We bridge that gap.</p>
+                <p>
+                  Our approach combines design thinking, software engineering, data
+                  analysis and practical AI to help businesses solve real operational
+                  challenges and create lasting value.
                 </p>
               </div>
             </div>
             <Card hover={false} className="p-8">
               <h3 className="text-xl font-normal text-text mb-6">Quick Facts</h3>
               <ul className="space-y-4 text-text-muted">
-                <li className="flex justify-between border-b border-background pb-4">
-                  <span>Founded</span>
-                  <span className="text-text">2024</span>
-                </li>
-                <li className="flex justify-between border-b border-background pb-4">
-                  <span>Focus</span>
-                  <span className="text-text">SMB Software</span>
-                </li>
-                <li className="flex justify-between">
-                  <span>Approach</span>
-                  <span className="text-text">Partnership-first</span>
-                </li>
+                {[
+                  'Enterprise and SME experience',
+                  'User-centred approach',
+                  'Software, Data and AI specialists',
+                  'Partnership-first delivery',
+                  'Solutions built for growth',
+                ].map((fact, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="text-text font-normal">–</span>
+                    {fact}
+                  </li>
+                ))}
               </ul>
             </Card>
           </div>
@@ -131,7 +140,9 @@ export default function About() {
               Let's work together
             </h2>
             <p className="mt-4 text-text-muted max-w-2xl mx-auto">
-              Ready to start your project? We'd love to hear from you.
+              Ready to explore what's possible with software, data, automation or AI?
+              We'd love to hear about your business and the challenges you're looking to
+              solve.
             </p>
             <div className="mt-8">
               <Button to="/contact">

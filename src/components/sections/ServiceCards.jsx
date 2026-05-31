@@ -7,21 +7,21 @@ const services = [
     title: 'Design & Build',
     href: '/services#design-and-build',
     description:
-      'User-centred design and custom-built software. Rapid prototyping, web and mobile apps, internal tools and customer platforms — built around the people who use them.',
+      'Custom software, apps and digital platforms designed around your users and business processes. From prototypes to production-ready solutions, we build software that people actually enjoy using.',
     icon: '✏️',
   },
   {
     title: 'Data & AI',
     href: '/services#data-and-ai',
     description:
-      'Practical AI, data analysis and live dashboards. Unlock patterns in your business data, monitor what matters, and put AI to work where it earns its keep.',
+      'Transform business data into actionable insights. Build dashboards, uncover trends and apply AI where it creates genuine value.',
     icon: '🤖',
   },
   {
     title: 'Automation & Integration',
     href: '/services#automation-and-integration',
     description:
-      'Connect your tools and automate the busywork. Data-driven customer notifications, lifecycle comms and seamless flow between the systems you already use.',
+      'Eliminate repetitive tasks, connect disconnected systems and automate workflows so your team can focus on higher-value work.',
     icon: '🔗',
   },
 ]
@@ -35,7 +35,8 @@ export default function ServiceCards() {
             What we do
           </h2>
           <p className="mt-4 text-text-muted max-w-2xl mx-auto">
-            User-centred design, AI and smart technology to help SMBs work better.
+            We help businesses reduce manual work, improve visibility and create better
+            customer and employee experiences through software, data and automation.
           </p>
         </div>
 
