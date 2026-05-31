@@ -17,6 +17,10 @@ const WEEKDAY_LABELS = [
 export default function BookingWidget() {
   const [step, setStep] = useState('date')
   const [timezone] = useState(() => Intl.DateTimeFormat().resolvedOptions().timeZone)
+  const [month, setMonth] = useState(() => {
+    const now = new Date()
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+  })
   const [availableDays, setAvailableDays] = useState([])
   const [slots, setSlots] = useState([])
   const [selectedDate, setSelectedDate] = useState(null)
@@ -34,8 +38,6 @@ export default function BookingWidget() {
   const notesId = useId()
 
   useEffect(() => {
-    const now = new Date()
-    const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
     setLoading(true)
     const params = new URLSearchParams({ month, timezone })
     fetch(`${API_ENDPOINT}?${params}`)
@@ -43,11 +45,26 @@ export default function BookingWidget() {
       .then((data) => {
         if (data.error) throw new Error(data.error)
         const today = new Date().toISOString().split('T')[0]
-        setAvailableDays((data.days || []).filter((d) => d >= today))
+        const days = (data.days || []).filter((d) => d >= today)
+        // When a month has no bookable days, booq.now returns the next date
+        // with availability. Jump the calendar forward to that month rather
+        // than dead-ending on an empty grid. Only advance to a *different*
+        // month so we can't loop; keep loading on until the refetch lands.
+        if (days.length === 0 && data.nextAvailableDate) {
+          const nextMonth = data.nextAvailableDate.slice(0, 7)
+          if (nextMonth !== month) {
+            setMonth(nextMonth)
+            return
+          }
+        }
+        setAvailableDays(days)
+        setLoading(false)
       })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false))
-  }, [timezone])
+      .catch((e) => {
+        setError(e.message)
+        setLoading(false)
+      })
+  }, [month, timezone])
 
   useEffect(() => {
     if (!selectedDate) return
@@ -122,12 +139,15 @@ export default function BookingWidget() {
   }
 
   function buildCalendar() {
-    const now = new Date()
-    const year = now.getFullYear()
-    const month = now.getMonth()
-    const firstDay = new Date(year, month, 1).getDay()
-    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    const [yearStr, monthStr] = month.split('-')
+    const year = Number(yearStr)
+    const monthIndex = Number(monthStr) - 1
+    const firstDay = new Date(year, monthIndex, 1).getDay()
+    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate()
     const availableSet = new Set(availableDays)
+    const now = new Date()
+    const isCurrentMonth =
+      year === now.getFullYear() && monthIndex === now.getMonth()
     const today = now.getDate()
 
     const cells = []
@@ -135,15 +155,15 @@ export default function BookingWidget() {
       cells.push({ day: null })
     }
     for (let d = 1; d <= daysInMonth; d++) {
-      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+      const dateStr = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
       cells.push({
         day: d,
         dateStr,
         available: availableSet.has(dateStr),
-        past: d < today,
+        past: isCurrentMonth && d < today,
       })
     }
-    return { cells, label: new Date(year, month).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) }
+    return { cells, label: new Date(year, monthIndex).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) }
   }
 
   if (step === 'confirmed' && booking) {

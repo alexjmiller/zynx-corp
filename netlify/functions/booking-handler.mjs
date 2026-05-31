@@ -82,13 +82,35 @@ export async function getAvailability({ month, date, timezone } = {}) {
   if (r.ok && month && Array.isArray(r.data?.days)) {
     const { date: todayStr, hour } = visitorNowParts(tz)
     if (hour >= SAME_DAY_CUTOFF_HOUR && r.data.days.includes(todayStr)) {
-      r.data = {
-        ...r.data,
-        days: r.data.days.filter((d) => d !== todayStr),
+      const days = r.data.days.filter((d) => d !== todayStr)
+      r.data = { ...r.data, days }
+      // booq.now only sets nextAvailableDate when a month has no days, so it's
+      // null here (the month did have today). If dropping today empties the
+      // month, that pointer is now stale and the calendar would dead-end —
+      // peek the next month to restore the jump-ahead.
+      if (days.length === 0 && !r.data.nextAvailableDate) {
+        r.data.nextAvailableDate = await peekNextAvailableDate(String(month), tz)
       }
     }
   }
   return r
+}
+
+// Returns the next bookable date at or after the month following `month`,
+// or null if there's none in the booking window. Used to recover a forward
+// pointer when the same-day cutoff empties the current month.
+function nextMonthOf(month) {
+  const [y, m] = month.split('-').map(Number)
+  const d = new Date(y, m, 1) // m (1-based) as a 0-based index = next month
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+async function peekNextAvailableDate(month, tz) {
+  const next = nextMonthOf(month)
+  const search = new URLSearchParams({ slug: BOOQ_SLUG, timezone: tz, month: next })
+  const r = await callBooq(`/api/v1/availability?${search.toString()}`, { method: 'GET' })
+  if (!r.ok) return null
+  return r.data?.days?.[0] || r.data?.nextAvailableDate || null
 }
 
 export async function createBooking(body = {}) {

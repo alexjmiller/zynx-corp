@@ -98,6 +98,7 @@ You have three tools for handling consultation bookings. The consultation is 30 
 
 - When a visitor wants to book, ask **which week works best — this one or next?**. Don't ask "what month?" — most people want something soon.
 - Call list_available_days for the current month. If their preferred week spans into the next month, call list_available_days again for that month too.
+- If list_available_days returns no \`days\` but includes a \`nextAvailable\`, that month is fully booked. Tell the visitor and offer that soonest date (quote its \`label\` verbatim), then call list_available_days for that date's month to show more options. If \`nextAvailable\` is null, there's genuinely nothing bookable — say so and point them to /contact or hello@zynx.co.
 - When showing days, **list the actual dates the tool returned**, in order. Pick the soonest 3–5 that match the visitor's preference. Render them human-readably (e.g. "Tuesday 20 May").
 - When the visitor picks a day, call list_slots for that date. **Do not list every slot the tool returned** — that's overwhelming. Show up to **3 morning** options (before 12:00pm) and up to **3 afternoon** options (12:00pm onward) — six max in total. If the day has many slots, briefly say so: *"Plenty of options that day — here are a few:"*. If the visitor wants more, you can call list_slots again or list more from the same result.
 - If you can tell the visitor's preference (e.g. they said "afternoon works better"), only show afternoon options.
@@ -360,28 +361,60 @@ async function callBooq(path, init, booqKey) {
   return { ok: res.ok, status: res.status, data }
 }
 
+// YYYY-MM for the month following `month`.
+function nextMonthOf(month) {
+  const [y, m] = month.split('-').map(Number)
+  const d = new Date(y, m, 1) // m (1-based) used as a 0-based index = next month
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+// Soonest bookable date at or after the month following `month`, or null.
+// Recovers a forward pointer when the same-day cutoff empties the current
+// month (booq.now only sets nextAvailableDate when a month has no days).
+async function peekNextAvailableDate(month, timezone, booqKey) {
+  const params = new URLSearchParams({ slug: BOOQ_SLUG, month: nextMonthOf(month), timezone })
+  const r = await callBooq(`/api/v1/availability?${params}`, { method: 'GET' }, booqKey)
+  if (!r.ok) return null
+  return r.data?.days?.[0] || r.data?.nextAvailableDate || null
+}
+
 async function executeTool(name, input, ctx) {
   const { booqKey, timezone } = ctx
   try {
     if (name === 'list_available_days') {
+      const month = String(input?.month || '')
       const params = new URLSearchParams({
         slug: BOOQ_SLUG,
-        month: String(input?.month || ''),
+        month,
         timezone,
       })
       const r = await callBooq(`/api/v1/availability?${params}`, { method: 'GET' }, booqKey)
       if (!r.ok) return { error: 'unavailable', status: r.status, message: r.data?.error || 'Could not fetch days.' }
       let rawDays = Array.isArray(r.data?.days) ? r.data.days : []
+      // booq.now returns nextAvailableDate when a month has no bookable days
+      // (the soonest date with availability, or null if none in the window).
+      let nextAvailableDate = r.data?.nextAvailableDate || null
       const { date: todayStr, hour: nowHour } = visitorNowParts(timezone)
-      if (nowHour >= SAME_DAY_CUTOFF_HOUR) {
+      if (nowHour >= SAME_DAY_CUTOFF_HOUR && rawDays.includes(todayStr)) {
         rawDays = rawDays.filter((d) => d !== todayStr)
+        // Dropping today may have emptied the month; booq's pointer was null
+        // because the month originally had days. Peek the next month so the
+        // bot can still offer the soonest real availability.
+        if (rawDays.length === 0 && !nextAvailableDate) {
+          nextAvailableDate = await peekNextAvailableDate(month, timezone, booqKey)
+        }
       }
       const days = rawDays.map((d) => ({
         date: d,
         weekday: weekdayFor(d),
         label: dayLabel(d),
       }))
-      return { days, month: input.month, timezone }
+      // Pre-format the fallback so the bot can quote its label verbatim
+      // without computing the weekday itself.
+      const nextAvailable = nextAvailableDate
+        ? { date: nextAvailableDate, weekday: weekdayFor(nextAvailableDate), label: dayLabel(nextAvailableDate) }
+        : null
+      return { days, month: input.month, timezone, nextAvailable }
     }
     if (name === 'list_slots') {
       const params = new URLSearchParams({
