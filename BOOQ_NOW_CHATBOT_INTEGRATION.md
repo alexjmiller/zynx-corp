@@ -39,9 +39,33 @@ Response:
 {
   "month": "2026-05",
   "timezone": "Europe/London",
-  "days": ["2026-05-19", "2026-05-20", "2026-05-22"]
+  "days": ["2026-05-19", "2026-05-20", "2026-05-22"],
+  "nextAvailableDate": null
 }
 ```
+
+When the month has **no** bookable days, `days` is empty and `nextAvailableDate`
+points to the soonest date with availability (within the booking window):
+
+```json
+{
+  "month": "2026-05",
+  "timezone": "Europe/London",
+  "days": [],
+  "nextAvailableDate": "2026-06-02"
+}
+```
+
+- `nextAvailableDate` is `null` whenever `days` is non-empty.
+- It is `null` when `days` is empty **and** there's genuinely no availability
+  in the booking window — that's the real empty state.
+
+Use it to skip fully-booked months instead of dead-ending: when `days` is
+empty, jump straight to `nextAvailableDate`'s month and re-query, rather than
+telling the visitor "nothing this month" and stopping. If you strip same-day
+slots client-side (e.g. dropping today after a cutoff hour) and that empties
+the month, booq's `nextAvailableDate` will be `null` because the month
+originally had days — peek the following month to recover the pointer.
 
 ### Slots on a specific day
 
@@ -155,7 +179,7 @@ On success:
 
 ## Recommended chatbot flow
 
-1. User asks to book → bot calls `check_availability` with `month` to find candidate days.
+1. User asks to book → bot calls `check_availability` with `month` to find candidate days. If that month is empty, follow `nextAvailableDate` to the next month with slots and re-query.
 2. Bot offers days → user picks one → bot calls `check_availability` with `date` to get exact slots.
 3. Bot presents slots (rendered in the user's timezone, but pass the raw UTC `start` back unchanged).
 4. Bot collects name, email and problem summary → calls `create_booking`.
